@@ -61,9 +61,7 @@ class Login extends React.Component {
         // 登录操作，需要进行网络通信
         // 先使用fetch API,然后在根据具体场景封装 FetchAPI
         console.log('userName = ' + this.userName);
-        console.log('userName = ' + !this.userName);
         console.log('password = ' + this.password);
-        console.log('password = ' + !this.password);
         if (!this.userName) {
             ToastUtil.showToast('请输入用户名');
             return;
@@ -77,12 +75,25 @@ class Login extends React.Component {
             isLoading:true
         });
         ApiService.login(this.userName, this.password)
-            .then((response) => {
-                console.log(response);
-                return response.json();
-            }).then((responseBody) => {
+            .then((responseBody) => {
+                console.log('responseBody in');
                 console.log(responseBody);
+                // 存储用户信息
+                storage.save({
+                    key:'user',
+                    data:responseBody.data,
+                    expires:null
+                });
+                // 单独存储token
+                storage.save({
+                    key:'token',
+                    data:responseBody.data.accessToken,
+                    expires:null
+                });
+                // 关闭本画面,并发送登录成功之后的通知
+                this.props.navigation.goBack();
             }).catch((err) => {
+                console.log('catch in');
                 console.log(err);
             }).finally(() => {
                 this.setState({

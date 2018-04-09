@@ -32,7 +32,16 @@ class Profile extends React.Component {
             <ScrollView style={{flexDirection:'column',flex:1}}>
                 {/*头部布局*/}
                 <TouchableOpacity onPress={() => {
-                    this.props.navigation.navigate('Login');
+                    
+                    storage.load({
+                        key:'user'
+                    }).then((ret) => {
+                        console.log(ret);
+                        this.props.navigation.navigate('AccountInfo');
+                    }).catch((err) => {
+                        console.log(err);
+                        this.props.navigation.navigate('Login');
+                    });
                     // console.log('hello!!!');
                     // console.log('hello2!!!');
                     // store.delete('userInfo');

@@ -75,7 +75,9 @@ class Profile extends React.Component {
                 {/*意见反馈、电话客服、设置*/}
                 <ProfileInfoListItem icon={'ios-mail-open-outline'} title={'意见反馈'} marginTop={COMMON_MARGIN}/>
                 <ProfileInfoListItem icon={'ios-headset-outline'} title={'电话客服'} marginTop={1}/>
-                <ProfileInfoListItem icon={'ios-settings-outline'} title={'设置'} marginTop={1}/>
+                <ProfileInfoListItem icon={'ios-settings-outline'} title={'设置'} marginTop={1} onPress={() => {
+                    this.props.navigation.navigate('Setting');
+                }}/>
 
             </ScrollView>
 

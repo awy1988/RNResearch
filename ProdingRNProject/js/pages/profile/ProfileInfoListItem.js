@@ -18,7 +18,7 @@ export default class ProfileInfoListItem extends React.Component {
 
     render() {
         return (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.props.onPress}>
                 <View style={{flexDirection:'row',height:COMMON_LIST_HEIGHT, alignItems:'center',padding:COMMON_PADDING,marginTop:this.props.marginTop,backgroundColor:COMMON_WHITE}}>
                     <Icon name={this.props.icon} size={20}/>
                     <Text style={{marginLeft:COMMON_MARGIN}}>{this.props.title}</Text>

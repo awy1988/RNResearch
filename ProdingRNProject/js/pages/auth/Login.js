@@ -1,7 +1,7 @@
 import React from "react";
-import {Button, Text, TextInput, TouchableOpacity, View, StyleSheet, Keyboard} from "react-native";
+import {Button, Text, TextInput, TouchableOpacity, View, StyleSheet, Keyboard, Image} from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
-import {COMMON_MARGIN, COMMON_WHITE} from "../../constants/StyleConstants";
+import {COMMON_MARGIN, COMMON_WHITE, COMMON_PADDING, COMMON_THEME_COLOR} from "../../constants/StyleConstants";
 import ThemeButton from "../../components/common/ThemeButton";
 import ApiService from "../../network/ApiService";
 import ToastUtil from "../../util/ToastUtil";
@@ -42,9 +42,14 @@ class Login extends React.Component {
         super(props);
         this.state = {
             isLoading:false,
+            isNeedCaptcha:false,
+            captchaUri:'',
+            captchaHash:'',
         }
         this.userName = '';
         this.password = '';
+        this.captcha = '';
+        // this.captchaHash = '';
     }
     
 
@@ -54,6 +59,10 @@ class Login extends React.Component {
 
     onPasswordChange(text) {
         this.password = text;
+    }
+
+    onCaptchaChange(text) {
+        this.captcha = text;
     }
 
     onLoginButtonClick() {
@@ -70,11 +79,17 @@ class Login extends React.Component {
             ToastUtil.showToast('请输入密码');
             return;
         }
+
+        if (this.state.isNeedCaptcha && !this.captcha) {
+            ToastUtil.showToast('请输入验证码');
+            return;
+        }
+
         Keyboard.dismiss();
         this.setState({
             isLoading:true
         });
-        ApiService.login(this.userName, this.password)
+        ApiService.login(this.userName, this.password, this.captcha, this.state.captchaHash)
             .then((responseBody) => {
                 console.log('responseBody in');
                 console.log(responseBody);
@@ -95,6 +110,14 @@ class Login extends React.Component {
             }).catch((err) => {
                 console.log('catch in');
                 console.log(err);
+                this.checkCaptcha();
+                err.json().then((errorBody) => {
+                        console.log('errorBody = ' + errorBody);
+                        console.log( errorBody);
+                        // console.log(errorBody);
+                        errorBody.error.message ? ToastUtil.showToast(errorBody.error.message) : '';
+                    }
+                );
             }).finally(() => {
                 this.setState({
                     isLoading:false
@@ -102,10 +125,38 @@ class Login extends React.Component {
             });
     }
 
-    
+    checkCaptcha() {
+        console.log('check captcha in');
+        ApiService.getCaptcha('signing-in', this.userName).then((responseBody) => {
+            console.log(responseBody);
+            if (responseBody.data) {
+                this.setState({
+                    isNeedCaptcha:true,
+                    captchaUri:responseBody.data.base64,
+                    captchaHash:responseBody.data.hash
+                });
+            }
+        });
+    }
+
+    showCaptcha() {
+        return ( 
+            <View style={[style.captchaContainer, {marginTop:1}]}>
+                <TextInput style={style.captchaTextInput} underlineColorAndroid={'transparent'} placeholder={'图形验证码'}
+                    onChangeText={(text) => {
+                        this.onCaptchaChange(text);
+                    }}
+                />
+                <View style={style.captchaImageContainer}>
+                    <Image style={style.captchaImage} source={{uri:this.state.captchaUri}} resizeMode='stretch'/>
+                    <Text style={style.captchaChangeText}>换一张</Text>
+                </View>
+            </View>);
+    }
 
     render(){
         console.log('render is called');
+        let captchaComponent = this.state.isNeedCaptcha ? this.showCaptcha() : null;
         return (
             <View style={{flexDirection:'column'}}>
                 <TextInput style={style.textInput} underlineColorAndroid={'transparent'} placeholder={'手机号'}
@@ -118,6 +169,7 @@ class Login extends React.Component {
                         this.onPasswordChange(text);
                     }}
                 />
+                {captchaComponent}
                 <ThemeButton text={'登录'} onPress={this.onLoginButtonClick.bind(this)}/>
                 <View style={{flexDirection:'row',justifyContent:'space-between',marginLeft:COMMON_MARGIN, marginRight:COMMON_MARGIN}}>
                     <Text onPress={()=>{ console.log('忘记密码')}}>忘记密码？</Text>
@@ -134,10 +186,35 @@ class Login extends React.Component {
 }
 
 const style = StyleSheet.create({
-    textInput :{
+    textInput:{
         height:40,
         backgroundColor:COMMON_WHITE,
         padding:10
+    },
+    captchaContainer:{
+        flexDirection:'row',
+        backgroundColor:COMMON_WHITE,
+        height:40,
+    },
+    captchaTextInput:{
+        flex:1,
+        height:40,
+        backgroundColor:COMMON_WHITE,
+        padding:10
+    },
+    captchaImageContainer:{
+        flexDirection:'row',
+        height:40,
+        justifyContent:'flex-end',
+        alignItems:'center'
+    },
+    captchaImage:{
+        width:75,
+        height:30,
+    },
+    captchaChangeText:{
+        color:COMMON_THEME_COLOR,
+        marginHorizontal: COMMON_MARGIN,
     }
 });
 

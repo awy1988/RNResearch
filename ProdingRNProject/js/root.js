@@ -10,6 +10,7 @@ import {Image, TouchableOpacity, View} from "react-native";
 import Category from "./pages/Category";
 import ShoppingCartContainer from "./pages/ShoppingCartContainer";
 import AccountInfo from "./pages/profile/account/AccountInfo";
+import Setting from "./pages/profile/Setting";
 import Login from "./pages/auth/Login";
 import Icon from "react-native-vector-icons/Ionicons";
 import {COMMON_MARGIN} from "./constants/StyleConstants";
@@ -45,6 +46,7 @@ const StackContainer = StackNavigator(
     {
         Tabs:{ screen: TabContainer},
         AccountInfo:{ screen: AccountInfo},
+        Setting:{ screen: Setting},
         Login:{ screen: Login },
         RegisterFirstStep:{ screen: RegisterFirstStep },
         RegisterSecondStep:{ screen: RegisterSecondStep },

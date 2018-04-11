@@ -5,13 +5,8 @@ import {COMMON_MARGIN, COMMON_THEME_COLOR, COMMON_WHITE, COMMON_PADDING, COMMON_
 import ThemeButton from "../../components/common/ThemeButton";
 import ToastUtil from "../../util/ToastUtil";
 import ApiService from "../../network/ApiService"
-import PopupDialog, {
-    DialogTitle,
-    DialogButton,
-    SlideAnimation,
-    ScaleAnimation,
-    FadeAnimation,
-  } from 'react-native-popup-dialog';
+import CaptchaDialog from "../../components/common/CaptchaDialog"
+
   
 
 class RegisterFirstStep extends React.Component {
@@ -81,7 +76,7 @@ class RegisterFirstStep extends React.Component {
     }
 
     showDialog() {
-        this.popupDialog.show();
+        this.refs.popupDialog.show();
     }
 
     refreshCaptcha() {
@@ -98,14 +93,15 @@ class RegisterFirstStep extends React.Component {
     }
 
     onCaptchaDialogInputChange(text) {
-        this.captchaText = text;
+        console.log('onCaptchadialogInputChange text = ' + text);
+        this.captchaText = text;234
     }
 
     getMobileVerification() {
         // 获取手机验证码
-        ApiService.getMobileSmsVerificationCode(this.mobile, this.captchaText, this.state.captchaHash).then((ret) => {
+        ApiService.getMobileVerificationCode(this.mobile, this.captchaText, this.state.captchaHash).then((ret) => {
             // 获取验证码成功，迁移到第二步
-            this.popupDialog.dismiss();
+            this.refs.popupDialog.dismiss();
             this.props.navigation.navigate('RegisterSecondStep',{ mobile:this.mobile });
             
         }).catch((err) => {
@@ -145,45 +141,12 @@ class RegisterFirstStep extends React.Component {
                 <View style={{flexDirection:'row', justifyContent:'center'}}>
                     <Text>注册代表同意</Text><Text style={style.textAgreement}>《Proding用户协议》</Text>
                 </View>
-                <PopupDialog
-                    width={0.7}
-                    height={200}
-                    containerStyle={{justifyContent:'flex-start',paddingTop:40}}
-                    ref={(popupDialog) => { this.popupDialog = popupDialog; }}>
-                    <View style={{flex:1,alignItems:'center',padding:COMMON_PADDING}}>
-                        <Text>图形验证码</Text>
-                        <TouchableWithoutFeedback
-                            onPress={() => {
-                                this.refreshCaptcha();
-                            }}>
-                            <View style={style.captchaImageContainer}>
-                                <Image style={style.captchaImage} source={{uri:this.state.captchaUri}} resizeMode='stretch'/>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </View>
-                    <View style={{alignItems:'center',padding:COMMON_PADDING}}>
-                        <TextInput style={style.captchaDialogTextInput} placeholder={'请输入验证码'} 
-                            onChangeText={(text) => {
-                                this.onCaptchaDialogInputChange(text);
-                            }}
-                        />
-                    </View>
-                    <View style={style.captchaDialogDivider}/>
-                    <View style={style.captchaDialogBottomContainer}>
-                        <TouchableOpacity style={style.captchaDialogBottomButton}
-                            onPress={() => {
-                                this.popupDialog.dismiss();
-                            }}>
-                            <Text>取消</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={style.captchaDialogBottomButton}
-                            onPress={() => {
-                                this.onDialogConfirmButtonClick();
-                            }}>
-                            <Text>确定</Text>
-                        </TouchableOpacity>
-                    </View>
-                </PopupDialog>
+                <CaptchaDialog 
+                    ref='popupDialog'
+                    captchaUri={this.state.captchaUri} 
+                    onCaptchaPress={this.refreshCaptcha.bind(this)}
+                    onTextInputChange={this.onCaptchaDialogInputChange.bind(this)}
+                    onConfirmClick={this.onDialogConfirmButtonClick.bind(this)}/>
             </View>
         );
     };
@@ -198,36 +161,6 @@ const style = StyleSheet.create({
     },
     textAgreement: {
         color: COMMON_THEME_COLOR
-    },
-    captchaImageContainer:{
-        width:75,
-        height:30,
-        marginTop:COMMON_MARGIN
-    },
-    captchaImage:{
-        width:75,
-        height:30,
-    },
-    captchaDialogTextInput :{
-        width:150,
-        height:40,
-        backgroundColor:COMMON_WHITE,
-        marginHorizontal: 10,
-    },
-    captchaDialogDivider :{
-        height:1,
-        backgroundColor:COMMON_DIVIDER_COLOR,
-    },
-    captchaDialogBottomContainer :{
-        flexDirection:'row',
-        height:40,
-        backgroundColor:COMMON_WHITE,
-    },
-    captchaDialogBottomButton :{
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center',
-        backgroundColor:COMMON_WHITE,
     },
 });
 

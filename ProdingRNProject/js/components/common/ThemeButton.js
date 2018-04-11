@@ -12,6 +12,7 @@ class ThemeButton extends React.Component {
         return (
             <TouchableOpacity
                 style={[style.btnContainer, this.props.btnStyle]}
+                activeOpacity={this.props.activeOpacity}
                 onPress={this.props.onPress}>
                 <Text style={[style.btnText, this.props.btnTextStyle]}>{this.props.text}</Text>
             </TouchableOpacity>

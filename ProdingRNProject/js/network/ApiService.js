@@ -38,16 +38,15 @@ export default class ApiService {
         return HttpUtil.get(url,null);
     }
 
-    static getMobileSmsVerificationCode(mobile, captchaText = '', captchaHash = '') {
-        // 使用模板字符串
+    static getMobileVerificationCode(mobile, captchaText = '', captchaHash = '', verificationPurpose='signing-up', verificationType='sms') {
         let url = `${BASE_URL}/mobiles/${mobile}/verifications`
 
         let queryParams = {
-            type:'sms'
+            type:verificationType
         }
 
         let bodyParams = {
-            purpose:'signing-up',
+            purpose:verificationPurpose,
         }
 
         if (captchaHash || captchaText){
@@ -57,5 +56,16 @@ export default class ApiService {
         }
 
         return HttpUtil.post(url, queryParams, bodyParams);
+    }
+
+    static getMobileSmsCountdownSeconds(mobile) {
+        let url = `${BASE_URL}/mobiles/${mobile}/countdown-seconds`
+        return HttpUtil.get(url);
+    }
+
+    // 检验手机短信验证码有效性
+    static checkVerificationCode(mobile, verificationCode) {
+        let url = `${BASE_URL}/mobiles/${mobile}/verifications/${verificationCode}`
+        return HttpUtil.get(url);
     }
 }

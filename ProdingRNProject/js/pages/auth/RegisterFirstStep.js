@@ -93,8 +93,7 @@ class RegisterFirstStep extends React.Component {
     }
 
     onCaptchaDialogInputChange(text) {
-        console.log('onCaptchadialogInputChange text = ' + text);
-        this.captchaText = text;234
+        this.captchaText = text;
     }
 
     getMobileVerification() {
@@ -114,8 +113,6 @@ class RegisterFirstStep extends React.Component {
 
     onDialogConfirmButtonClick() {
         // 验证码对话框确认按钮点击逻辑
-        console.log('this.captcha = ' + this.captchaText);
-
         if (!this.captchaText){
             ToastUtil.showToast('验证码为空');
             return;

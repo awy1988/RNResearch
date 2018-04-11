@@ -4,6 +4,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {COMMON_MARGIN, COMMON_WHITE} from "../../constants/StyleConstants";
 import ThemeButton from "../../components/common/ThemeButton";
 import ApiService from "../../network/ApiService";
+import ToastUtil from "../../util/ToastUtil";
+import CaptchaDialog from "../../components/common/CaptchaDialog"
 
 class RegisterSecondStep extends React.Component {
 
@@ -25,10 +27,13 @@ class RegisterSecondStep extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            countdown:60
+            countdown:60,
+            captchaUri:'',
+            captchaHash:'',
         }
         this.mobile = this.props.navigation.state.params.mobile;
         this.verificationCode = '';
+        this.captchaText = '';
 
     }
 
@@ -49,11 +54,14 @@ class RegisterSecondStep extends React.Component {
     }
 
     onVerificationCodeInputChange(text) {
+        console.log('onVerificationCodeInputChange in text = ' + text);
         this.verificationCode = text;
     }
 
-    regetSmsCode() {
-        this.getMobileVerification(false);
+    showDialog() {
+        if (this.state.countdown !== 0) return;
+        this.refs.popupDialog.show();
+        this.refreshCaptcha();
     }
 
     getMobileVerification(isVoice) {
@@ -108,7 +116,34 @@ class RegisterSecondStep extends React.Component {
         });
         
     }
+
+    refreshCaptcha() {
+        // 刷新验证码
+        ApiService.getCaptcha('signing-up',this.mobile).then(ret => {
+            console.log(ret);
+            // this.showDialog();
+            this.setState({
+                captchaUri:ret.data.base64,
+                captchaHash:ret.data.hash
+            });
+        
+        });
+    }
     
+    onCaptchaDialogInputChange(text) {
+        this.captchaText = text;
+    }
+
+    onDialogConfirmButtonClick() {
+        // 验证码对话框确认按钮点击逻辑
+        if (!this.captchaText){
+            ToastUtil.showToast('验证码为空');
+            return;
+        }
+        // 验证码不为空，调用接口发送短信
+        this.refs.popupDialog.dismiss();
+        this.getMobileVerification(false);
+    }
     
     render(){
         return (
@@ -116,7 +151,7 @@ class RegisterSecondStep extends React.Component {
                 <Text style={{margin:COMMON_MARGIN}}>验证码已发送至您的手机{this.mobile}</Text>
                 <View style={style.codeInputContainer}>
                     <TextInput style={style.textInput} underlineColorAndroid={'transparent'} placeholder={'验证码'}
-                        onPress={(text) => {
+                        onChangeText={(text) => {
                             this.onVerificationCodeInputChange(text);
                         }}
                     />
@@ -124,7 +159,7 @@ class RegisterSecondStep extends React.Component {
                         btnStyle={this.state.countdown === 0? style.getVCodeButtonStyleNormal: style.getVCodeButtonStyleDisable} 
                         text={this.state.countdown === 0? '重新获取': this.state.countdown} 
                         activeOpacity={1} 
-                        onPress={this.regetSmsCode.bind(this)}/>
+                        onPress={this.showDialog.bind(this)}/>
                 </View>
                 <ThemeButton
                     text={'下一步，设置密码'}
@@ -135,6 +170,13 @@ class RegisterSecondStep extends React.Component {
                 <View style={{flexDirection:'row', justifyContent:'center'}}>
                     <Text>收不到短信？使用</Text><Text>语音验证码</Text>
                 </View>
+
+                <CaptchaDialog 
+                    ref='popupDialog'
+                    captchaUri={this.state.captchaUri} 
+                    onCaptchaPress={this.refreshCaptcha.bind(this)}
+                    onTextInputChange={this.onCaptchaDialogInputChange.bind(this)}
+                    onConfirmClick={this.onDialogConfirmButtonClick.bind(this)}/>
 
             </View>
         );

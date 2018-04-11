@@ -164,7 +164,7 @@ class Login extends React.Component {
                         this.onUserNameChange(text);
                     }}
                 />
-                <TextInput style={[style.textInput,{ marginTop:1}]} underlineColorAndroid={'transparent'} placeholder={'密码'}
+                <TextInput style={[style.textInput,{ marginTop:1}]} underlineColorAndroid={'transparent'} placeholder={'密码'} secureTextEntry={true}
                     onChangeText={(text) => {
                         this.onPasswordChange(text);
                     }}

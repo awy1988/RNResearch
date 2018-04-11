@@ -42,22 +42,6 @@ class Profile extends React.Component {
                         console.log(err);
                         this.props.navigation.navigate('Login');
                     });
-                    // console.log('hello!!!');
-                    // console.log('hello2!!!');
-                    // store.delete('userInfo');
-                    // store.get('userInfo').then((res) => {
-                    //     if (res) {
-                    //         // 用户已登录
-                    //         this.props.navigation.navigate('AccountInfo');
-                    //     } else {
-                    //         // 用户未登录
-                    //         this.props.navigation.navigate('Login');
-                    //     }
-                    // }).catch((error) => {
-                    //     this.props.navigation.navigate('Login');
-                    // }).finally( () => {
-                    //     console.log('finally!!!');
-                    // });
                 }}>
                     <View style={{flexDirection:'row',alignItems:'center', height:100, backgroundColor:COMMON_WHITE}}
                           >

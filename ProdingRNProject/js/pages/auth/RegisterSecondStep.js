@@ -23,6 +23,7 @@ class RegisterSecondStep extends React.Component {
 
     constructor(props) {
         super(props);
+        this.mobile = this.props.navigation.state.params.mobile;
     }
 
     render(){

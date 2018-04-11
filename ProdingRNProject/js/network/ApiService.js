@@ -30,4 +30,32 @@ export default class ApiService {
         url = actionKey ? url + '/' + actionKey : url;
         return HttpUtil.get(url, null);
     }
+
+    static checkMobileAvailable(mobile) {
+        // 使用模板字符串
+        let url = `${BASE_URL}/mobiles/${mobile}/registered`
+        console.log('url = ' + url);
+        return HttpUtil.get(url,null);
+    }
+
+    static getMobileSmsVerificationCode(mobile, captchaText = '', captchaHash = '') {
+        // 使用模板字符串
+        let url = `${BASE_URL}/mobiles/${mobile}/verifications`
+
+        let queryParams = {
+            type:'sms'
+        }
+
+        let bodyParams = {
+            purpose:'signing-up',
+        }
+
+        if (captchaHash || captchaText){
+            bodyParams.captcha = {};
+            if (captchaText) bodyParams.captcha.text = captchaText;
+            if (captchaHash) bodyParams.captcha.hash = captchaHash;
+        }
+
+        return HttpUtil.post(url, queryParams, bodyParams);
+    }
 }

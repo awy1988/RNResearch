@@ -40,7 +40,7 @@ class Profile extends React.Component {
                         this.props.navigation.navigate('AccountInfo');
                     }).catch((err) => {
                         console.log(err);
-                        this.props.navigation.navigate('Login');
+                        this.props.navigation.navigate({routeName:'Login', key:'KEY_LOGIN'});
                     });
                 }}>
                     <View style={{flexDirection:'row',alignItems:'center', height:100, backgroundColor:COMMON_WHITE}}

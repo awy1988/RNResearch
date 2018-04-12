@@ -68,4 +68,14 @@ export default class ApiService {
         let url = `${BASE_URL}/mobiles/${mobile}/verifications/${verificationCode}`
         return HttpUtil.get(url);
     }
+
+    static register(mobile, verificationCode, password) {
+        let url = `${BASE_URL}/users`;
+        let bodyParams = {
+            mobile: mobile,
+            mobileVerificationCode: verificationCode,
+            password: password
+        }
+        return HttpUtil.post(url, null, bodyParams);
+    }
 }

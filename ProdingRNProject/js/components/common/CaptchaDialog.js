@@ -10,7 +10,7 @@ import PopupDialog, {
   } from 'react-native-popup-dialog';
 
 class CaptchaDialog extends React.Component {
-// TODO 完善验证码弹出对话框组件，然后用于需要验证码的画面
+    //验证码弹出对话框组件，然后用于需要验证码的画面
     constructor(props) {
         super(props);
     }

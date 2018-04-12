@@ -104,7 +104,10 @@ class RegisterSecondStep extends React.Component {
             let code = ret.data.code;
             if(code === this.verificationCode) {
                 // 验证通过，进入下一步
-                this.props.navigation.navigate('RegisterThirdStep');
+                this.props.navigation.navigate('RegisterThirdStep',{
+                    mobile: this.mobile,
+                    code: this.verificationCode
+                });
             } else {
                 // 未验证通过，提示
                 ToastUtil.showToast('验证码错误，请重新填写！');

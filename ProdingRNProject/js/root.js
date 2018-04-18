@@ -17,6 +17,13 @@ import {COMMON_MARGIN} from "./constants/StyleConstants";
 import RegisterFirstStep from "./pages/auth/RegisterFirstStep";
 import RegisterSecondStep from "./pages/auth/RegisterSecondStep";
 import RegisterThirdStep from "./pages/auth/RegisterThirdStep";
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+
+import createSagaMiddleware from 'redux-saga';
+import rootReducer from './reducers';
+import LoginContainer from "./containers/LoginContainer";
+import rootSaga from "./sagas/index"
 
 const TabContainer = TabNavigator(
     {
@@ -47,7 +54,7 @@ const StackContainer = StackNavigator(
         Tabs:{ screen: TabContainer},
         AccountInfo:{ screen: AccountInfo},
         Setting:{ screen: Setting},
-        Login:{ screen: Login },
+        Login:{ screen: LoginContainer },
         RegisterFirstStep:{ screen: RegisterFirstStep },
         RegisterSecondStep:{ screen: RegisterSecondStep },
         RegisterThirdStep:{ screen: RegisterThirdStep },
@@ -57,11 +64,18 @@ const StackContainer = StackNavigator(
     }
 );
 
+const sagaMiddleware = createSagaMiddleware();
+
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+
+sagaMiddleware.run(rootSaga);
 
 export default class Root extends React.Component {
     render() {
         return (
+          <Provider store={store}>
             <StackContainer/>
+          </Provider>
         );
     }
 }

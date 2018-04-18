@@ -40,16 +40,31 @@ class Login extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            isLoading:false,
-            isNeedCaptcha:false,
-            captchaUri:'',
-            captchaHash:'',
-        }
+        // this.state = {
+        //     isLoading:false,
+        //     isNeedCaptcha:false,
+        //     captchaUri:'',
+        //     captchaHash:'',
+        // }
         this.userName = '';
         this.password = '';
         this.captcha = '';
+        console.log('this.props = ' );
+        console.log(this.props);
         // this.captchaHash = '';
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.isLoginSuccess) {
+            this.props.navigation.goBack();
+        }
+        if (nextProps.errorMessage) {
+            ToastUtil.showToast(nextProps.errorMessage);
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.exit();
     }
     
 
@@ -66,6 +81,8 @@ class Login extends React.Component {
     }
 
     onLoginButtonClick() {
+
+
         console.log('登录');
         // 登录操作，需要进行网络通信
         // 先使用fetch API,然后在根据具体场景封装 FetchAPI
@@ -80,12 +97,16 @@ class Login extends React.Component {
             return;
         }
 
-        if (this.state.isNeedCaptcha && !this.captcha) {
+        if (this.props.isNeedCaptcha && !this.captcha) {
             ToastUtil.showToast('请输入验证码');
             return;
         }
 
         Keyboard.dismiss();
+
+        this.props.login(this.userName,this.password, this.captcha, this.props.captchaHash);
+        return;
+
         this.setState({
             isLoading:true
         });
@@ -126,17 +147,7 @@ class Login extends React.Component {
     }
 
     checkCaptcha() {
-        console.log('check captcha in');
-        ApiService.getCaptcha('signing-in', this.userName).then((responseBody) => {
-            console.log(responseBody);
-            if (responseBody.data) {
-                this.setState({
-                    isNeedCaptcha:true,
-                    captchaUri:responseBody.data.base64,
-                    captchaHash:responseBody.data.hash
-                });
-            }
-        });
+        this.props.checkCaptcha('signing-in', this.userName);
     }
 
     showCaptcha() {
@@ -148,15 +159,17 @@ class Login extends React.Component {
                     }}
                 />
                 <View style={style.captchaImageContainer}>
-                    <Image style={style.captchaImage} source={{uri:this.state.captchaUri}} resizeMode='stretch'/>
-                    <Text style={style.captchaChangeText}>换一张</Text>
+                    <Image style={style.captchaImage} source={{uri:this.props.captchaUri}} resizeMode='stretch'/>
+                    <Text style={style.captchaChangeText} onPress={ ()=> {
+                        this.checkCaptcha();
+                    }}>换一张</Text>
                 </View>
             </View>);
     }
 
     render(){
         console.log('render is called');
-        let captchaComponent = this.state.isNeedCaptcha ? this.showCaptcha() : null;
+        let captchaComponent = this.props.isNeedCaptcha ? this.showCaptcha() : null;
         return (
             <View style={{flexDirection:'column'}}>
                 <TextInput style={style.textInput} underlineColorAndroid={'transparent'} placeholder={'手机号'}
@@ -179,7 +192,7 @@ class Login extends React.Component {
                         }}>注册</Text>
                 </View>
 
-                <Spinner visible={this.state.isLoading} textContent={"加载中"} textStyle={{color: '#FFF', fontSize:16}} />
+                <Spinner visible={this.props.isLoading} textContent={"加载中"} textStyle={{color: '#FFF', fontSize:16}} />
             </View>
         );
     };

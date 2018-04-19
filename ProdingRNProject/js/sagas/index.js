@@ -20,14 +20,11 @@ export function* requestUserLogin(action) {
     // 在 saga 中封装业务逻辑
     try {
         const responseBody = yield call(ApiService.login,action.payload.username, action.payload.password, action.payload.captcha, action.payload.captchaHash);
-        console.log(responseBody);
         LoginService.saveUserInfo(responseBody.data);
         LoginService.saveToken(responseBody.data.accessToken);
 
         yield put(loginSuccessAction());
     }catch (e) {
-        console.log('loginFailed-----');
-        console.log(e);
         const errorInfo = yield call(handleError,e);
         if (errorInfo && errorInfo.error && errorInfo.error.message) {
             yield put(loginFailedAction({errorMessage: errorInfo.error.message}));
@@ -46,11 +43,8 @@ export function* requestUserLogin(action) {
 }
 
 export function* requestCaptcha(action) {
-    console.log('requestCaptcha in ---->');
-    console.log(action);
     try {
         const responseBody = yield call(ApiService.getCaptcha, action.payload.actionType, action.payload.actionKey);
-        console.log(responseBody);
         if (responseBody.data) {
             yield put(loginShowCaptchaAction({
                 captchaUri:responseBody.data.base64,

@@ -21,6 +21,7 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 
 import createSagaMiddleware from 'redux-saga';
+import logger from 'redux-logger';
 import rootReducer from './reducers';
 import LoginContainer from "./containers/LoginContainer";
 import rootSaga from "./sagas/index"
@@ -66,7 +67,7 @@ const StackContainer = StackNavigator(
 
 const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware, logger));
 
 sagaMiddleware.run(rootSaga);
 

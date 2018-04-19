@@ -7,6 +7,10 @@ import ApiService from "../../network/ApiService";
 import ToastUtil from "../../util/ToastUtil";
 import Spinner from 'react-native-loading-spinner-overlay';
 
+import PropTypes from 'prop-types';
+
+
+
 class LoginBackImage extends React.Component {
 
     render() {
@@ -19,6 +23,18 @@ class LoginBackImage extends React.Component {
         );
     }
 }
+
+const propTypes = {
+    isLoading: PropTypes.bool,
+    isNeedCaptcha: PropTypes.bool,
+    isLoginSuccess: PropTypes.bool,
+    captchaUri: PropTypes.string,
+    captchaHash: PropTypes.string,
+    errorMessage: PropTypes.string,
+    login: PropTypes.func,
+    checkCaptcha: PropTypes.func,
+    exit: PropTypes.func
+};
 
 class Login extends React.Component {
 
@@ -49,8 +65,6 @@ class Login extends React.Component {
         this.userName = '';
         this.password = '';
         this.captcha = '';
-        console.log('this.props = ' );
-        console.log(this.props);
         // this.captchaHash = '';
     }
 
@@ -105,45 +119,6 @@ class Login extends React.Component {
         Keyboard.dismiss();
 
         this.props.login(this.userName,this.password, this.captcha, this.props.captchaHash);
-        return;
-
-        this.setState({
-            isLoading:true
-        });
-        ApiService.login(this.userName, this.password, this.captcha, this.state.captchaHash)
-            .then((responseBody) => {
-                console.log('responseBody in');
-                console.log(responseBody);
-                // 存储用户信息
-                storage.save({
-                    key:'user',
-                    data:responseBody.data,
-                    expires:null
-                });
-                // 单独存储token
-                storage.save({
-                    key:'token',
-                    data:responseBody.data.accessToken,
-                    expires:null
-                });
-                // 关闭本画面,并发送登录成功之后的通知
-                this.props.navigation.goBack();
-            }).catch((err) => {
-                console.log('catch in');
-                console.log(err);
-                this.checkCaptcha();
-                err.json().then((errorBody) => {
-                        console.log('errorBody = ' + errorBody);
-                        console.log( errorBody);
-                        // console.log(errorBody);
-                        errorBody.error.message ? ToastUtil.showToast(errorBody.error.message) : '';
-                    }
-                );
-            }).finally(() => {
-                this.setState({
-                    isLoading:false
-                })
-            });
     }
 
     checkCaptcha() {
@@ -231,5 +206,6 @@ const style = StyleSheet.create({
     }
 });
 
+Login.propTypes = propTypes;
 
 export default Login;

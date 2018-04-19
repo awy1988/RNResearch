@@ -3,8 +3,6 @@ import {loginAction, loginCheckCaptchaAction, loginExitAction} from '../actions'
 import Login from '../pages/auth/Login';
 
 const mapStateToProps = (state) => {
-    console.log('mapStatetoProps ------>');
-    console.log(state);
     return {
         isLoading: state.login.isLoading,
         isNeedCaptcha: state.login.isNeedCaptcha,

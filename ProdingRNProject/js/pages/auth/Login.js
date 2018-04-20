@@ -160,7 +160,10 @@ class Login extends React.Component {
                 {captchaComponent}
                 <ThemeButton text={'登录'} onPress={this.onLoginButtonClick.bind(this)}/>
                 <View style={{flexDirection:'row',justifyContent:'space-between',marginLeft:COMMON_MARGIN, marginRight:COMMON_MARGIN}}>
-                    <Text onPress={()=>{ console.log('忘记密码')}}>忘记密码？</Text>
+                    <Text onPress={()=>{
+                        console.log('忘记密码')
+                        this.props.navigation.navigate('ResetPwdFirstStep');
+                    }}>忘记密码？</Text>
                     <Text
                         onPress={()=>{
                             this.props.navigation.navigate('RegisterFirstStep');

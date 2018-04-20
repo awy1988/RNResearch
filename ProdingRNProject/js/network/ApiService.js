@@ -12,7 +12,7 @@ export default class ApiService {
         let bodyParams = {
             username:userName,
             password:passWord
-        }
+        };
 
         if (captchaHash || captchaText){
             bodyParams.captcha = {};
@@ -48,11 +48,11 @@ export default class ApiService {
 
         let queryParams = {
             type:verificationType
-        }
+        };
 
         let bodyParams = {
             purpose:verificationPurpose,
-        }
+        };
 
         if (captchaHash || captchaText){
             bodyParams.captcha = {};

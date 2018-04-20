@@ -25,6 +25,7 @@ import logger from 'redux-logger';
 import rootReducer from './reducers';
 import LoginContainer from "./containers/LoginContainer";
 import rootSaga from "./sagas/index"
+import ResetPwdFirstStep from "./pages/auth/ResetPwdFirstStep";
 
 const TabContainer = TabNavigator(
     {
@@ -59,6 +60,7 @@ const StackContainer = StackNavigator(
         RegisterFirstStep:{ screen: RegisterFirstStep },
         RegisterSecondStep:{ screen: RegisterSecondStep },
         RegisterThirdStep:{ screen: RegisterThirdStep },
+        ResetPwdFirstStep:{ screen: ResetPwdFirstStep },
     },
     {
         initialRouteName: 'Tabs'

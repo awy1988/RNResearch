@@ -30,9 +30,9 @@ const thirdStepInitialState = {
 // 找回密码第一步
 resetPasswordFirstStep = (state = firstStepInitialState, action) => {
     switch(action.type) {
-        case types.findPassword.CHECK_MOBILE_AVAILABLE:
+        case types.resetPassword.CHECK_MOBILE_AVAILABLE:
             break;
-        case types.findPassword.FIND_PWD_FIRST_STEP_SHOW_CAPTCHA:
+        case types.resetPassword.FIND_PWD_FIRST_STEP_SHOW_CAPTCHA:
             return {
                 ...state,
                 showCaptcha:true,
@@ -46,7 +46,7 @@ resetPasswordFirstStep = (state = firstStepInitialState, action) => {
 // 找回密码第二步
 resetPasswordSecondStep = (state = secondStepInitialState, action) => {
     switch(action.type) {
-        case types.findPassword.CHECK_MOBILE_AVAILABLE:
+        case types.resetPassword.CHECK_MOBILE_AVAILABLE:
             return {
                 ...state,
                 isLoading:true
@@ -60,7 +60,7 @@ resetPasswordSecondStep = (state = secondStepInitialState, action) => {
 // 找回密码第三步
 resetPasswordThirdStep = (state = thirdStepInitialState, action) => {
     switch(action.type) {
-        case types.findPassword.CHECK_MOBILE_AVAILABLE:
+        case types.resetPassword.CHECK_MOBILE_AVAILABLE:
             return {
                 ...state,
                 isLoading:true

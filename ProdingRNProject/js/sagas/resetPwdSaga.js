@@ -31,8 +31,6 @@ export function* requestCheckMobileAvailable(action) {
 
 export function* requestCaptcha(action) {
 
-    console.log('requestCaptcha in findPwd');
-
     try {
         const responseBody = yield call(ApiService.getCaptcha, action.payload.actionType, action.payload.actionKey);
         if (responseBody.data) {
@@ -48,7 +46,7 @@ export function* requestCaptcha(action) {
 }
 
 export function* watchCheckMobileAvailable() {
-    yield takeEvery(types.findPassword.CHECK_MOBILE_AVAILABLE, requestCheckMobileAvailable);
+    yield takeEvery(types.resetPassword.CHECK_MOBILE_AVAILABLE, requestCheckMobileAvailable);
 }
 
 export function* watchCaptcha() {

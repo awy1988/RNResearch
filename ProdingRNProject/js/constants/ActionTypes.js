@@ -10,7 +10,7 @@ const login = {
 };
 
 // 找回密码
-const findPassword = {
+const resetPassword = {
     CHECK_MOBILE_AVAILABLE : Symbol('CHECK_MOBILE_AVAILABLE'),
     MOBILE_AVAILABLE : Symbol('MOBILE_AVAILABLE'),
     MOBILE_UNAVAILABLE : Symbol('MOBILE_UNAVAILABLE'),
@@ -20,4 +20,4 @@ const findPassword = {
     FIND_PWD_FIRST_STEP_SHOW_CAPTCHA : Symbol('FIND_PWD_FIRST_STEP_SHOW_CAPTCHA')
 };
 
-export {login, findPassword}
+export {login, resetPassword}

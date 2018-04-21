@@ -9,6 +9,7 @@ import CaptchaDialog from "../../components/common/CaptchaDialog"
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 import {checkMobileAvailableAction} from "../../actions/auth/resetPwdActions";
+import resetPassword from "../../reducers/auth/resetPasswordReducer";
   
 // 组件的组织方面，我们将container组件与 UI 组件定义在一个文件中，因为画面很多的情况下，每个画面单独定义一个container，直接导致文件的倍增，而且也不利于查找。
 
@@ -195,10 +196,10 @@ const style = StyleSheet.create({
 
 /* =============================================================================
  container组件定义
- 我们可以任意命名我们导出的组件，但是建议命名为：<FindPwdFirstStepContainer/>
+ 我们可以任意命名我们导出的组件，但是建议命名为：<ResetPwdFirstStepContainer/>
 ============================================================================= */
 const mapStateToProps = (state) => {
-    return state.findPassword.resetPasswordFirstStep;
+    return state.resetPassword.resetPasswordFirstStep;
 };
 
 const mapDispatchToProps = dispatch => ({

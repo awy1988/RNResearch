@@ -4,7 +4,7 @@ const firstStepInitialState = {
     showCaptcha:false,
     captchaUri:'',
     captchaHash:'',
-    errorMessage:''
+    shouldToSecond:false
 };
 
 const secondStepInitialState = {
@@ -30,14 +30,25 @@ const thirdStepInitialState = {
 // 找回密码第一步
 resetPasswordFirstStep = (state = firstStepInitialState, action) => {
     switch(action.type) {
-        case types.resetPassword.CHECK_MOBILE_AVAILABLE:
-            break;
-        case types.resetPassword.FIND_PWD_FIRST_STEP_SHOW_CAPTCHA:
+        case types.resetPassword.RESET_PWD_FIRST_STEP_SHOW_CAPTCHA:
             return {
                 ...state,
                 showCaptcha:true,
                 captchaUri:action.payload.captchaUri,
                 captchaHash: action.payload.captchaHash
+            };
+
+        case types.resetPassword.FETCH_MOBILE_VERIFICATION_CODE_SUCCESS:
+            return {
+                ...state,
+                showCaptcha:false,
+                fetchMobileVCodeSuccess:true
+            };
+        case types.resetPassword.TO_SECOND_STEP:
+            return {
+                ...state,
+                fetchMobileVCodeSuccess:false,
+                shouldToSecond:true
             };
     }
     return state;

@@ -1,5 +1,5 @@
 import {watchCaptcha, watchLogin} from "./loginSaga";
-import {watchCheckMobileAvailable, watchCaptcha as watchCaptcha2} from "./resetPwdSaga";
+import {watchCheckMobileAvailable, watchCaptchaRefresh, watchFetchMobileVerificationCode} from "./resetPwdSaga";
 
 
 export default function* rootSaga() {
@@ -7,6 +7,7 @@ export default function* rootSaga() {
         watchLogin(),
         watchCaptcha(),
         watchCheckMobileAvailable(),
-        watchCaptcha2()
+        watchCaptchaRefresh(),
+        watchFetchMobileVerificationCode(),
     ]
 }

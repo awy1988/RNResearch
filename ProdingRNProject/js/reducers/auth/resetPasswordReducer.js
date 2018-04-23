@@ -4,16 +4,12 @@ const firstStepInitialState = {
     showCaptcha:false,
     captchaUri:'',
     captchaHash:'',
-    shouldToSecond:false
 };
 
 const secondStepInitialState = {
-    isLoading:false,
-    isNeedCaptcha:false,
-    isLoginSuccess:false,
+    countdown:0,
     captchaUri:'',
     captchaHash:'',
-    errorMessage:''
 };
 
 const thirdStepInitialState = {
@@ -45,11 +41,7 @@ resetPasswordFirstStep = (state = firstStepInitialState, action) => {
                 fetchMobileVCodeSuccess:true
             };
         case types.resetPassword.TO_SECOND_STEP:
-            return {
-                ...state,
-                fetchMobileVCodeSuccess:false,
-                shouldToSecond:true
-            };
+            return firstStepInitialState;
     }
     return state;
 };
@@ -57,12 +49,16 @@ resetPasswordFirstStep = (state = firstStepInitialState, action) => {
 // 找回密码第二步
 resetPasswordSecondStep = (state = secondStepInitialState, action) => {
     switch(action.type) {
-        case types.resetPassword.CHECK_MOBILE_AVAILABLE:
+        case types.resetPassword.GET_V_CODE_SUCCESS:
             return {
                 ...state,
-                isLoading:true
+                countdown: action.payload.countdown
             };
-
+        // case types.resetPassword.FETCH_MOBILE_VERIFICATION_CODE_SECOND_STEP_SUCCESS:
+        //     return {
+        //         ...state,
+        //         countdown: action.payload.countdown
+        //     }
 
     }
     return state;

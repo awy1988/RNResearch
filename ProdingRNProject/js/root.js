@@ -26,6 +26,7 @@ import rootReducer from './reducers';
 import LoginContainer from "./containers/LoginContainer";
 import rootSaga from "./sagas/index"
 import ResetPwdFirstStep from "./pages/auth/ResetPwdFirstStep";
+import ResetPwdSecondStep from "./pages/auth/ResetPwdSecondStep";
 
 const TabContainer = TabNavigator(
     {
@@ -61,6 +62,7 @@ const StackContainer = StackNavigator(
         RegisterSecondStep:{ screen: RegisterSecondStep },
         RegisterThirdStep:{ screen: RegisterThirdStep },
         ResetPwdFirstStep:{ screen: ResetPwdFirstStep },
+        ResetPwdSecondStep:{ screen: ResetPwdSecondStep },
     },
     {
         initialRouteName: 'Tabs'

@@ -24,7 +24,6 @@ const propTypes = {
     captchaHash: PropTypes.string,
     isMobileRegistered: PropTypes.bool,
     showCaptcha: PropTypes.bool,
-    shouldToSecond: PropTypes.bool,
     fetchMobileVCodeSuccess: PropTypes.bool
 };
 
@@ -63,10 +62,7 @@ class ResetPwdFirstStep extends React.Component {
         if (nextProps.fetchMobileVCodeSuccess) {
             this.refs.popupDialog.dismiss();
             this.props.toSecondStep();
-        }
-
-        if (nextProps.shouldToSecond) {
-            // this.props.navigation.navigate('RegisterSecondStep',{ mobile:this.mobile });
+            this.props.navigation.navigate('ResetPwdSecondStep',{ mobile:this.mobile });
         }
     }
 

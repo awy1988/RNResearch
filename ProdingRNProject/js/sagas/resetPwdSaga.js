@@ -5,7 +5,7 @@ import {takeEvery} from "redux-saga";
 import {call, put} from "redux-saga/effects";
 import {
     fetchMobileVerificationCodeSuccessAction,
-    getCaptchaAction,
+    getCaptchaAction, getMobileVCodeSuccessAction,
     resetPwdFirstStepShowCaptchaAction
 } from "../actions/auth/resetPwdActions";
 
@@ -14,8 +14,11 @@ function handleError(e) {
     return e.json();
 }
 
+/* =============================================================================
+ 重置密码第一步
+============================================================================= */
 // 验证手机号是否可用
-export function* requestCheckMobileAvailable(action) {
+function* requestCheckMobileAvailable(action) {
     try {
         const responseBody = yield call(ApiService.checkMobileAvailable, action.payload.mobile);
         if (responseBody.data) {
@@ -57,7 +60,7 @@ function* requestCaptcha(action) {
 }
 
 // 获取手机短信验证码
-export function* requestMobileVerificationCode(action) {
+function* requestMobileVerificationCode(action) {
     try {
         const responseBody = yield call(ApiService.getMobileVerificationCode, action.payload.mobile, action.payload.captchaText, action.payload.captchaHash, action.payload.purpose, action.payload.type);
         yield put(fetchMobileVerificationCodeSuccessAction());
@@ -87,3 +90,29 @@ export function* watchCaptchaRefresh() {
 export function* watchFetchMobileVerificationCode() {
     yield takeEvery(types.resetPassword.FETCH_MOBILE_VERIFICATION_CODE, requestMobileVerificationCode);
 }
+
+/* =============================================================================
+ 重置密码第二步
+============================================================================= */
+
+function* requestMobileVCodeSecondStep(action) {
+    try {
+        const responseBody = yield call(ApiService.getMobileVerificationCode, action.payload.mobile, action.payload.captchaText, action.payload.captchaHash, action.payload.purpose, action.payload.type);
+        yield put(getMobileVCodeSuccessAction({countdown : responseBody.data.countdown}));
+    } catch (e) {
+        const errorInfo = yield call(handleError, e);
+        if (errorInfo && errorInfo.error && errorInfo.error.message) {
+            ToastUtil.showToast(errorInfo.error.message);
+        }
+    }
+}
+
+export function* watchGetMobileVCodeSecondStep() {
+    yield takeEvery(types.resetPassword.GET_V_CODE, requestMobileVCodeSecondStep);
+}
+
+
+
+
+
+

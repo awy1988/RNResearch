@@ -1,16 +1,15 @@
 import React from 'react';
 import { Button, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
-import { NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { COMMON_MARGIN, COMMON_WHITE, COMMON_PADDING } from '../../constants/StyleConstants';
 import ThemeButton from '../../components/common/ThemeButton';
 import ToastUtil from '../../util/ToastUtil';
 import ApiService from '../../network/ApiService';
-
+import { NavigationActions } from 'react-navigation';
 
 class RegisterThirdStep extends React.Component {
     static navigationOptions = ({ navigation }) => ({
-      title: '注册',
+      title: '找回密码',
       headerTitleStyle: {
         flex: 1,
         fontSize: 18,
@@ -45,49 +44,9 @@ class RegisterThirdStep extends React.Component {
 
       if (this.passwordInput !== this.passwordInputConfirm) {
         ToastUtil.showToast('两次输入的密码不一致');
-        return;
       }
 
-      // 验证通过，注册用户
-      ApiService.register(this.mobile, this.verificationCode, this.passwordInputConfirm).then((ret) => {
-        console.log(ret);
-        ToastUtil.showToast('注册成功');
-        this.signin();
-      }).catch((err) => {
-        console.log(err);
-        err.json().then((ret) => {
-          if (ret.error.message) ToastUtil.showToast(ret.error.message);
-        });
-      });
-    }
-
-    signin() {
-      // 登录
-      ApiService.login(this.mobile, this.passwordInputConfirm).then((ret) => {
-        console.log(ret);
-        // 存储用户信息
-        storage.save({
-          key: 'user',
-          data: ret.data,
-          expires: null,
-        });
-        // 单独存储token
-        storage.save({
-          key: 'token',
-          data: ret.data.accessToken,
-          expires: null,
-        });
-        // 关闭登录、注册第一步、注册第二步、还有本页面
-        const backAction = NavigationActions.back({
-          key: 'KEY_LOGIN',
-        });
-        this.props.navigation.dispatch(backAction);
-      }).catch((err) => {
-        console.log(err);
-        err.json().then((ret) => {
-          if (ret.error.message) ToastUtil.showToast(ret.error.message);
-        });
-      });
+      // 验证通过，修改密码
     }
 
     render() {

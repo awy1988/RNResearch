@@ -1,19 +1,19 @@
-import {watchCaptcha, watchLogin} from "./loginSaga";
+import { watchCaptcha, watchLogin } from './loginSaga';
 import {
-    watchCheckMobileAvailable,
-    watchCaptchaRefresh,
-    watchFetchMobileVerificationCode,
-    watchGetMobileVCodeSecondStep
-} from "./resetPwdSaga";
+  watchCheckMobileAvailable,
+  watchCaptchaRefresh,
+  watchFetchMobileVerificationCode,
+  watchGetMobileVCodeSecondStep,
+} from './resetPwdSaga';
 
 
 export default function* rootSaga() {
-    yield [
-        watchLogin(),
-        watchCaptcha(),
-        watchCheckMobileAvailable(),
-        watchCaptchaRefresh(),
-        watchFetchMobileVerificationCode(),
-        watchGetMobileVCodeSecondStep(),
-    ]
+  yield [
+    watchLogin(),
+    watchCaptcha(),
+    watchCheckMobileAvailable(),
+    watchCaptchaRefresh(),
+    watchFetchMobileVerificationCode(),
+    watchGetMobileVCodeSecondStep(),
+  ];
 }

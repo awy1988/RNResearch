@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Text, TextInput, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { COMMON_MARGIN, COMMON_WHITE } from '../../constants/StyleConstants';
 import ThemeButton from '../../components/common/ThemeButton';
@@ -27,7 +27,7 @@ class ResetPwdSecondStep extends React.Component {
     // 3.重新获取短信验证码需要输入图形验证码
     // 4.获取语音验证码前需要输入图形验证码（此功能暂时不提供）
 
-    static navigationOptions = ({ navigation }) => ({
+    static navigationOptions = () => ({
       title: '找回密码',
       headerTitleStyle: {
         flex: 1,
@@ -54,18 +54,22 @@ class ResetPwdSecondStep extends React.Component {
       this.verificationCode = '';
       this.captchaText = '';
       this.countDownId;
+      this.showDialog = this.showDialog.bind(this);
+      this.refreshCaptcha = this.refreshCaptcha.bind(this);
+      this.onCaptchaDialogInputChange = this.onCaptchaDialogInputChange.bind(this);
+      this.onDialogConfirmButtonClick = this.onDialogConfirmButtonClick.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-      // console.log('componentWillReceiveProps resetPwdSecondStep is called');
-      // if (nextProps.countdown > 0) {
-      //     // 需要倒计时，进行倒计时操作
-      //     this.setState({
-      //         countdown:nextProps.countdown
-      //     });
-      //     this.startCountdown();
-      // }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //   // console.log('componentWillReceiveProps resetPwdSecondStep is called');
+    //   // if (nextProps.countdown > 0) {
+    //   //     // 需要倒计时，进行倒计时操作
+    //   //     this.setState({
+    //   //         countdown:nextProps.countdown
+    //   //     });
+    //   //     this.startCountdown();
+    //   // }
+    // }
 
     componentDidMount() {
       // 发送网络请求获取倒计时秒数，并开始倒计时
@@ -92,7 +96,7 @@ class ResetPwdSecondStep extends React.Component {
 
     showDialog() {
       if (this.state.countdown !== 0) return;
-      this.refs.popupDialog.show();
+      this.popupDialog.show();
       this.refreshCaptcha();
     }
 
@@ -136,7 +140,7 @@ class ResetPwdSecondStep extends React.Component {
         const code = ret.data.code;
         if (code === this.verificationCode) {
           // 验证通过，进入下一步
-          this.props.navigation.navigate('RegisterThirdStep', {
+          this.props.navigation.navigate('ResetPwdThirdStep', {
             mobile: this.mobile,
             code: this.verificationCode,
           });
@@ -177,7 +181,7 @@ class ResetPwdSecondStep extends React.Component {
         return;
       }
       // 验证码不为空，调用接口发送短信
-      this.refs.popupDialog.dismiss();
+      this.popupDialog.dismiss();
       this.getMobileVerification(false);
     }
 
@@ -198,11 +202,11 @@ class ResetPwdSecondStep extends React.Component {
               btnStyle={this.state.countdown === 0 ? style.getVCodeButtonStyleNormal : style.getVCodeButtonStyleDisable}
               text={this.state.countdown === 0 ? '重新获取' : this.state.countdown}
               activeOpacity={1}
-              onPress={this.showDialog.bind(this)}
+              onPress={this.showDialog}
             />
           </View>
           <ThemeButton
-            text="下一步，设置密码"
+            text="下一步"
             onPress={() => {
                         this.onNextStepButtonClick();
                     }}
@@ -212,11 +216,11 @@ class ResetPwdSecondStep extends React.Component {
           </View>
 
           <CaptchaDialog
-            ref="popupDialog"
+            ref={(ref) => { this.popupDialog = ref; }}
             captchaUri={this.state.captchaUri}
-            onCaptchaPress={this.refreshCaptcha.bind(this)}
-            onTextInputChange={this.onCaptchaDialogInputChange.bind(this)}
-            onConfirmClick={this.onDialogConfirmButtonClick.bind(this)}
+            onCaptchaPress={this.refreshCaptcha}
+            onTextInputChange={this.onCaptchaDialogInputChange}
+            onConfirmClick={this.onDialogConfirmButtonClick}
           />
 
         </View>

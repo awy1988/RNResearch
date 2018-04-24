@@ -1,8 +1,8 @@
+import { takeEvery } from 'redux-saga';
+import { call, put } from 'redux-saga/effects';
 import ToastUtil from '../util/ToastUtil';
 import * as types from '../constants/ActionTypes';
 import ApiService from '../network/ApiService';
-import { takeEvery } from 'redux-saga';
-import { call, put } from 'redux-saga/effects';
 import {
   fetchMobileVerificationCodeSuccessAction,
   getCaptchaAction, getMobileVCodeSuccessAction,

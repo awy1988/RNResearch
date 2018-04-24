@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Text, TextInput, View, StyleSheet } from 'react-native';
 import { COMMON_MARGIN, COMMON_WHITE } from '../../constants/StyleConstants';
 import ThemeButton from '../../components/common/ThemeButton';
 import ApiService from '../../network/ApiService';
@@ -8,7 +7,7 @@ import ToastUtil from '../../util/ToastUtil';
 import CaptchaDialog from '../../components/common/CaptchaDialog';
 
 class RegisterSecondStep extends React.Component {
-    static navigationOptions = ({ navigation }) => ({
+    static navigationOptions = () => ({
       title: '注册',
       headerTitleStyle: {
         flex: 1,
@@ -31,13 +30,15 @@ class RegisterSecondStep extends React.Component {
       this.mobile = this.props.navigation.state.params.mobile;
       this.verificationCode = '';
       this.captchaText = '';
+      this.refreshCaptcha = this.refreshCaptcha.bind(this);
+      this.onCaptchaDialogInputChange = this.onCaptchaDialogInputChange.bind(this);
+      this.onDialogConfirmButtonClick = this.onDialogConfirmButtonClick.bind(this);
+      this.showDialog = this.showDialog.bind(this);
     }
 
     componentDidMount() {
       // 发送网络请求获取倒计时秒数
       ApiService.getMobileSmsCountdownSeconds(this.mobile).then((ret) => {
-        console.log(ret);
-        const countdown = ret.data.countdown;
         this.setState({
           countdown: ret.data.countdown,
         });
@@ -56,7 +57,7 @@ class RegisterSecondStep extends React.Component {
 
     showDialog() {
       if (this.state.countdown !== 0) return;
-      this.refs.popupDialog.show();
+      this.popupDialog.show();
       this.refreshCaptcha();
     }
 
@@ -137,7 +138,7 @@ class RegisterSecondStep extends React.Component {
         return;
       }
       // 验证码不为空，调用接口发送短信
-      this.refs.popupDialog.dismiss();
+      this.popupDialog.dismiss();
       this.getMobileVerification(false);
     }
 
@@ -158,7 +159,7 @@ class RegisterSecondStep extends React.Component {
               btnStyle={this.state.countdown === 0 ? style.getVCodeButtonStyleNormal : style.getVCodeButtonStyleDisable}
               text={this.state.countdown === 0 ? '重新获取' : this.state.countdown}
               activeOpacity={1}
-              onPress={this.showDialog.bind(this)}
+              onPress={this.showDialog}
             />
           </View>
           <ThemeButton
@@ -172,11 +173,11 @@ class RegisterSecondStep extends React.Component {
           </View>
 
           <CaptchaDialog
-            ref="popupDialog"
+            ref={(ref) => { this.popupDialog = ref; }}
             captchaUri={this.state.captchaUri}
-            onCaptchaPress={this.refreshCaptcha.bind(this)}
-            onTextInputChange={this.onCaptchaDialogInputChange.bind(this)}
-            onConfirmClick={this.onDialogConfirmButtonClick.bind(this)}
+            onCaptchaPress={this.refreshCaptcha}
+            onTextInputChange={this.onCaptchaDialogInputChange}
+            onConfirmClick={this.onDialogConfirmButtonClick}
           />
 
         </View>

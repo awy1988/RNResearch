@@ -88,10 +88,18 @@ export default class ApiService {
   }
 
   // 更新登录密码
-  static updateUserPassword(newPassword, password = '', username = '', email = '', emailVerificationCode = '', mobile = '', mobileVerificationCode = '') {
+  static updateUserPassword({ newPassword, password = '', username = '', email = '', emailVerificationCode = '', mobile = '', mobileVerificationCode = '' }) {
     const url = `${BASE_URL}/user/profile/password`;
     const bodyParams = {};
     bodyParams.newPassword = newPassword;
     if (password) bodyParams.password = password;
+    if (username) bodyParams.username = username;
+    if (email) bodyParams.email = email;
+    if (emailVerificationCode) bodyParams.emailVerificationCode = emailVerificationCode;
+    if (mobile) bodyParams.mobile = mobile;
+    if (mobileVerificationCode) bodyParams.mobileVerificationCode = mobileVerificationCode;
+
+    return HttpUtil.put(url, null, bodyParams);
+
   }
 }

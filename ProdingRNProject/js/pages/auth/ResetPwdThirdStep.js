@@ -1,14 +1,14 @@
 import React from 'react';
-import { Button, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { COMMON_MARGIN, COMMON_WHITE, COMMON_PADDING } from '../../constants/StyleConstants';
+import { TextInput, View, StyleSheet } from 'react-native';
+import { NavigationActions } from 'react-navigation';
+import { COMMON_WHITE, COMMON_PADDING } from '../../constants/StyleConstants';
 import ThemeButton from '../../components/common/ThemeButton';
 import ToastUtil from '../../util/ToastUtil';
 import ApiService from '../../network/ApiService';
-import { NavigationActions } from 'react-navigation';
+
 
 class RegisterThirdStep extends React.Component {
-    static navigationOptions = ({ navigation }) => ({
+    static navigationOptions = () => ({
       title: '找回密码',
       headerTitleStyle: {
         flex: 1,
@@ -44,9 +44,21 @@ class RegisterThirdStep extends React.Component {
 
       if (this.passwordInput !== this.passwordInputConfirm) {
         ToastUtil.showToast('两次输入的密码不一致');
+        return;
       }
 
       // 验证通过，修改密码
+      ApiService.updateUserPassword({ newPassword: this.passwordInputConfirm, mobile: this.mobile, mobileVerificationCode: this.verificationCode }).then(() => {
+        const backAction = NavigationActions.back({
+          key: 'KEY_LOGIN',
+        });
+        ToastUtil.showToast('设置密码成功');
+        this.props.navigation.dispatch(backAction);
+      }).catch((err) => {
+        err.json().then((ret) => {
+          if (ret.error.message) ToastUtil.showToast(ret.error.message);
+        });
+      });
     }
 
     render() {
@@ -55,7 +67,7 @@ class RegisterThirdStep extends React.Component {
           <TextInput
             style={style.textInput}
             underlineColorAndroid="transparent"
-            placeholder="输入密码"
+            placeholder="输入新密码"
             onChangeText={(text) => {
                         this.onPasswordInput(text);
                     }}
@@ -64,14 +76,14 @@ class RegisterThirdStep extends React.Component {
           <TextInput
             style={style.textInput}
             underlineColorAndroid="transparent"
-            placeholder="再次输入密码"
+            placeholder="再次输入新密码"
             onChangeText={(text) => {
                         this.onPasswordConfirmInput(text);
                     }}
             secureTextEntry
           />
           <ThemeButton
-            text="完成注册"
+            text="保存"
             onPress={() => {
                         this.onConfirmButtonClick();
                     }}

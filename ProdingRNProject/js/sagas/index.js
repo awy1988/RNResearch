@@ -5,6 +5,7 @@ import {
   watchFetchMobileVerificationCode,
   watchGetMobileVCodeSecondStep,
 } from './resetPwdSaga';
+import {watchFetchItems, watchFetchItemsLoadMore} from './mainSaga';
 
 
 export default function* rootSaga() {
@@ -15,5 +16,7 @@ export default function* rootSaga() {
     watchCaptchaRefresh(),
     watchFetchMobileVerificationCode(),
     watchGetMobileVCodeSecondStep(),
+    watchFetchItems(),
+    watchFetchItemsLoadMore(),
   ];
 }

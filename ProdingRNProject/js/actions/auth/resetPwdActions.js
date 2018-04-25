@@ -1,5 +1,5 @@
-import * as types from '../../constants/ActionTypes';
 import { createAction } from 'redux-actions';
+import * as types from '../../constants/ActionTypes';
 
 
 // 找回密码第一步

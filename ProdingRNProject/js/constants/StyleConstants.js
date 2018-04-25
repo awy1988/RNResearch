@@ -8,4 +8,7 @@ export const COMMON_LIST_HEIGHT = 40;
 export const COMMON_WHITE = '#fff';
 export const COMMON_THEME_COLOR = '#2f9bff';
 export const COMMON_DIVIDER_COLOR = '#e1e1e1';
+export const COMMON_DANGER_COLOR = '#f4333c';
+export const COMMON_PRIMARY_FONT_COLOR = '#333333';
+export const COMMON_SECONDARY_FONT_COLOR = '#888888';
 

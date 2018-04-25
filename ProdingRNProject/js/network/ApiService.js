@@ -100,6 +100,46 @@ export default class ApiService {
     if (mobileVerificationCode) bodyParams.mobileVerificationCode = mobileVerificationCode;
 
     return HttpUtil.put(url, null, bodyParams);
+  }
 
+  // 获取商品列表
+  static getItems({ name,
+    priceFrom,
+    priceUntil,
+    packageId,
+    categories,
+    features,
+    ageGrades,
+    province,
+    city,
+    location,
+    maxDistance,
+    status,
+    sort,
+    page }) {
+    const url = `${BASE_URL}/items`;
+    const queryParams = {};
+
+    if (name) queryParams.name = name;
+    if (priceFrom) queryParams.priceFrom = priceFrom;
+    if (priceUntil) queryParams.priceUntil = priceUntil;
+    if (packageId) queryParams.packageId = packageId;
+    if (categories) queryParams.categories = categories;
+    if (features) queryParams.features = features;
+    if (ageGrades) queryParams.ageGrades = ageGrades;
+    if (province) queryParams.province = province;
+    if (city) queryParams.city = city;
+    if (location) queryParams.location = location;
+    if (maxDistance) queryParams.maxDistance = maxDistance;
+    if (status) queryParams.status = status;
+    if (sort) queryParams.sort = sort;
+    if (page) queryParams.page = page;
+
+    return HttpUtil.get(url, queryParams);
+  }
+
+  // 共同加载更多
+  static loadMore(nextUrl) {
+    return HttpUtil.get(`${BASE_URL}${nextUrl}`);
   }
 }

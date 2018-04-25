@@ -23,4 +23,11 @@ const resetPassword = {
   FETCH_MOBILE_VERIFICATION_CODE_SECOND_STEP_SUCCESS: Symbol('FETCH_MOBILE_VERIFICATION_CODE_SECOND_STEP_SUCCESS'),
 };
 
-export { login, resetPassword };
+const main = {
+  FETCH_ITEMS: Symbol('FETCH_ITEMS'),
+  FETCH_ITEMS_LOAD_MORE: Symbol('FETCH_ITEMS_LOAD_MORE'),
+  FETCH_ITEMS_SUCCESS: Symbol('FETCH_ITEMS_SUCCESS'),
+  FETCH_ITEMS_LOAD_MORE_SUCCESS: Symbol('FETCH_ITEMS_LOAD_MORE_SUCCESS'),
+};
+
+export { login, resetPassword, main };

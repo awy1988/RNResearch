@@ -1,5 +1,5 @@
-import { login } from '../../constants/ActionTypes';
 import { createAction } from 'redux-actions';
+import { login } from '../../constants/ActionTypes';
 
 // export const loginAction = (username, password) => ({
 //   type:types.USER_LOGIN,

@@ -99,7 +99,23 @@ export default class HttpUtil {
     if (queryParams) {
       const paramsArray = [];
       // 拼接参数
-      Object.keys(queryParams).forEach(key => paramsArray.push(`${key}=${queryParams[key]}`));
+      Object.keys(queryParams).forEach((key) => {
+        // 查询参数处理
+        if (typeof queryParams[key] === 'object') {
+          // 如果是对象的情况下，需要进行特殊处理
+          if (queryParams[key] instanceof Array) {
+            // 查询参数是数组
+            queryParams[key].forEach(v => paramsArray.push(`${key}[]=${v}`));
+          } else {
+            // 查询参数是一个普通对象
+            for (const tempKey of Object.keys(queryParams[key])) {
+              paramsArray.push(`${key}[${tempKey}]=${queryParams[key][tempKey]}`);
+            }
+          }
+        } else {
+          paramsArray.push(`${key}=${queryParams[key]}`);
+        }
+      });
       if (url.search(/\?/) === -1) {
         url += `?${paramsArray.join('&')}`;
       } else {

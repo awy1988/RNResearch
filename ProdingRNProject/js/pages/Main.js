@@ -1,17 +1,62 @@
 import React from 'react';
-import { Text, View, FlatList, StyleSheet, Image } from 'react-native';
+import {Text, View, FlatList, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { fetchItemsAction, fetchItemsLoadMoreAction } from '../actions/mainActions';
+import Swiper from 'react-native-swiper';
+import { fetchItemsAction, fetchItemsAdvertisementAction, fetchItemsLoadMoreAction } from '../actions/mainActions';
 import {
   COMMON_DANGER_COLOR,
   COMMON_DIVIDER_COLOR,
   COMMON_PADDING,
   COMMON_SECONDARY_FONT_COLOR,
-  COMMON_WHITE,
+  COMMON_WHITE, DEVICE_WIDTH,
 } from '../constants/StyleConstants';
 import { BASE_URL } from '../constants/ApiConstants';
 import ListDividerLine from '../components/common/ListDividerLine';
+
+
+class ListHeader extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log('liestHeader');
+    console.log(props);
+  }
+
+  renderBanner = (imageUri, link) => {
+    return (
+      <TouchableWithoutFeedback style={listHeaderStyle.container}
+        onPress={() => {
+          // 迁移到webView画面，加载link
+          this.props.navigation.navigate('WebViewPage', {
+            url: link,
+          });
+        }}
+      >
+        <Image style={listHeaderStyle.headerImage} source={{ uri: `${BASE_URL}${imageUri}` }} />
+      </TouchableWithoutFeedback>
+    );
+    // return this.props.advertisements.map((value) => {
+    //   return (
+    //     <View style={listHeaderStyle.container}>
+    //       <Image style={listHeaderStyle.headerImage} source={{ uri: `${BASE_URL}${value.cover}` }} />
+    //     </View>
+    //   );
+    // });
+  };
+
+  render() {
+    return (
+      <Swiper style={listHeaderStyle.container}>
+
+        {
+          this.props.advertisements.map((value) => {
+            return this.renderBanner(value.coverLarge, value.link);
+          })
+        }
+      </Swiper>
+    );
+  }
+}
 
 class Main extends React.Component {
     static navigationOptions = {
@@ -19,13 +64,30 @@ class Main extends React.Component {
       tabBarIcon: ({ tintColor }) => <Icon name="md-home" size={25} color={tintColor} />,
     };
 
-    // constructor(props) {
-    //   super(props);
-    // }
+    constructor(props) {
+      super(props);
+      this.renderHeader = this.renderHeader.bind(this);
+      this.renderFooter = this.renderFooter.bind(this);
+    }
+
+    renderHeader() {
+      return (
+        <ListHeader advertisements={this.props.advertisements} navigation={this.props.navigation} />
+      );
+    }
+
+    renderFooter() {
+      return (
+        <View style={listFooterStyle.container}>
+          <Text style={listFooterStyle.text}>{this.props.links.next ? '加载中...' : '没有更多数据'}</Text>
+        </View>
+      );
+    }
 
     componentDidMount() {
       // 发送获取首页数据的Action
       this.props.getItems('21', '02', '121.526363', '38.859562');
+      this.props.getAdvertisements('normal', 'item');
     }
 
     render() {
@@ -33,6 +95,8 @@ class Main extends React.Component {
         <View style={{ flexDirection: 'column' }}>
           <FlatList
             data={this.props.items}
+            ListHeaderComponent={this.renderHeader}
+            ListFooterComponent={this.renderFooter}
             ItemSeparatorComponent={ListDividerLine}
             renderItem={({ item }) =>
                 (<View style={listItemStyle.itemContainer}>
@@ -69,6 +133,64 @@ class Main extends React.Component {
 /* =============================================================================
  UI组件style
 ============================================================================= */
+
+const styles = StyleSheet.create({
+  wrapper: {
+    height: DEVICE_WIDTH / 2.3,
+  },
+  slideImage: {
+    flex: 1,
+  },
+  slide1: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#9DD6EB',
+  },
+  slide2: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#97CAE5',
+  },
+  slide3: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#92BBD9',
+  },
+  text: {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+});
+
+const listHeaderStyle = StyleSheet.create({
+  container: {
+    width: DEVICE_WIDTH,
+    height: DEVICE_WIDTH / 2.3,
+  },
+  headerImage: {
+    width: DEVICE_WIDTH,
+    height: DEVICE_WIDTH / 2.3,
+    resizeMode: 'cover',
+  },
+});
+
+const listFooterStyle = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COMMON_WHITE,
+  },
+  text: {
+    color: COMMON_SECONDARY_FONT_COLOR,
+  },
+});
+
 const listItemStyle = StyleSheet.create({
   itemContainer: {
     flexDirection: 'row',
@@ -112,6 +234,7 @@ const mapStateToProps = state => state.main;
 const mapDispatchToProps = dispatch => ({
   getItems: (province, city, longitude, latitude) => dispatch(fetchItemsAction({ province, city, longitude, latitude })),
   getItemsLoadMore: nextUrl => dispatch(fetchItemsLoadMoreAction({ nextUrl })),
+  getAdvertisements: (status, type) => dispatch(fetchItemsAdvertisementAction({ status, type })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

@@ -23,6 +23,7 @@ import rootSaga from './sagas/index';
 import ResetPwdFirstStep from './pages/auth/ResetPwdFirstStep';
 import ResetPwdSecondStep from './pages/auth/ResetPwdSecondStep';
 import ResetPwdThirdStep from './pages/auth/ResetPwdThirdStep';
+import WebViewPage from "./pages/WebViewPage";
 
 const TabContainer = TabNavigator(
   {
@@ -59,6 +60,7 @@ const StackContainer = StackNavigator(
     ResetPwdFirstStep: { screen: ResetPwdFirstStep },
     ResetPwdSecondStep: { screen: ResetPwdSecondStep },
     ResetPwdThirdStep: { screen: ResetPwdThirdStep },
+    WebViewPage: { screen: WebViewPage },
   },
   {
     initialRouteName: 'Tabs',

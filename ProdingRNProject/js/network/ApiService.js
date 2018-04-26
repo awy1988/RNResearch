@@ -138,6 +138,19 @@ export default class ApiService {
     return HttpUtil.get(url, queryParams);
   }
 
+  // 获取广告
+  static getAdvertisements(status, type, sort = {}) {
+    const url = `${BASE_URL}/advertisements`;
+    const queryParams = {
+      status,
+      type,
+    };
+
+    if (Object.keys(sort).length > 0) queryParams.sort = sort;
+
+    return HttpUtil.get(url, queryParams);
+  }
+
   // 共同加载更多
   static loadMore(nextUrl) {
     return HttpUtil.get(`${BASE_URL}${nextUrl}`);

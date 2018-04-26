@@ -3,7 +3,11 @@ import { call, put } from 'redux-saga/effects';
 import * as types from '../constants/ActionTypes';
 import ApiService from '../network/ApiService';
 import ToastUtil from '../util/ToastUtil';
-import { fetchItemsLoadMoreSuccessAction, fetchItemsSuccessAction } from '../actions/mainActions';
+import {
+  fetchItemsAdvertisementSuccessAction,
+  fetchItemsLoadMoreSuccessAction,
+  fetchItemsSuccessAction,
+} from '../actions/mainActions';
 
 
 function handleError(e) {
@@ -36,10 +40,28 @@ export function* requestFetchItemsLoadMore(action) {
   }
 }
 
+function* requestFetchItemsAdvertisement(action) {
+  // 首页轮播广告
+  try {
+    const responseBody = yield call(ApiService.getAdvertisements, action.payload.status, action.payload.type);
+    console.log(responseBody);
+    yield put(fetchItemsAdvertisementSuccessAction({ advertisements: responseBody.data }));
+  } catch (e) {
+    const errorInfo = yield call(handleError, e);
+    if (errorInfo && errorInfo.error && errorInfo.error.message) {
+      ToastUtil.showToast(errorInfo.error.message);
+    }
+  }
+}
+
 export function* watchFetchItems() {
   yield takeEvery(types.main.FETCH_ITEMS, requestFetchItems);
 }
 
 export function* watchFetchItemsLoadMore() {
   yield takeEvery(types.main.FETCH_ITEMS_LOAD_MORE, requestFetchItemsLoadMore);
+}
+
+export function* watchFetchItemAdvertisement() {
+  yield takeEvery(types.main.FETCH_ITEMS_ADVERTISEMENT, requestFetchItemsAdvertisement);
 }

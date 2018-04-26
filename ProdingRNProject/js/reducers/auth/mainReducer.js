@@ -4,6 +4,7 @@ const initialState = {
   isLoading: false,
   items: [],
   links: {},
+  advertisements: [],
 };
 
 
@@ -27,6 +28,11 @@ export default main = (state = initialState, action) => {
         ...state,
         items: state.items.concat(action.payload.items),
         links: action.payload.links,
+      };
+    case types.main.FETCH_ITEMS_ADVERTISEMENT_SUCCESS:
+      return {
+        ...state,
+        advertisements: action.payload.advertisements,
       };
     default:
       break;

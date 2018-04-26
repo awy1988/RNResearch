@@ -5,3 +5,5 @@ export const fetchItemsAction = createAction(types.main.FETCH_ITEMS);
 export const fetchItemsLoadMoreAction = createAction(types.main.FETCH_ITEMS_LOAD_MORE);
 export const fetchItemsSuccessAction = createAction(types.main.FETCH_ITEMS_SUCCESS);
 export const fetchItemsLoadMoreSuccessAction = createAction(types.main.FETCH_ITEMS_LOAD_MORE_SUCCESS);
+export const fetchItemsAdvertisementAction = createAction(types.main.FETCH_ITEMS_ADVERTISEMENT);
+export const fetchItemsAdvertisementSuccessAction = createAction(types.main.FETCH_ITEMS_ADVERTISEMENT_SUCCESS);

@@ -3,6 +3,7 @@ import {Text, View, FlatList, StyleSheet, Image, TouchableOpacity, TouchableWith
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Swiper from 'react-native-swiper';
+import SplashScreen from 'react-native-splash-screen';
 import { fetchItemsAction, fetchItemsAdvertisementAction, fetchItemsLoadMoreAction } from '../actions/mainActions';
 import {
   COMMON_DANGER_COLOR,
@@ -86,6 +87,7 @@ class Main extends React.Component {
 
     componentDidMount() {
       // 发送获取首页数据的Action
+      SplashScreen.hide();
       this.props.getItems('21', '02', '121.526363', '38.859562');
       this.props.getAdvertisements('normal', 'item');
     }

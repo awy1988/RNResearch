@@ -8,6 +8,7 @@ import createSagaMiddleware from 'redux-saga';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import logger from 'redux-logger';
+import WelcomePage from './pages/WelcomePage';
 import Main from './pages/Main';
 import Profile from './pages/profile/Profile';
 import Category from './pages/Category';
@@ -23,7 +24,7 @@ import rootSaga from './sagas/index';
 import ResetPwdFirstStep from './pages/auth/ResetPwdFirstStep';
 import ResetPwdSecondStep from './pages/auth/ResetPwdSecondStep';
 import ResetPwdThirdStep from './pages/auth/ResetPwdThirdStep';
-import WebViewPage from "./pages/WebViewPage";
+import WebViewPage from './pages/WebViewPage';
 
 const TabContainer = TabNavigator(
   {
@@ -50,6 +51,7 @@ const TabContainer = TabNavigator(
 
 const StackContainer = StackNavigator(
   {
+    WelcomePage: { screen: WelcomePage },
     Tabs: { screen: TabContainer },
     AccountInfo: { screen: AccountInfo },
     Setting: { screen: Setting },
@@ -63,7 +65,7 @@ const StackContainer = StackNavigator(
     WebViewPage: { screen: WebViewPage },
   },
   {
-    initialRouteName: 'Tabs',
+    initialRouteName: 'WelcomePage',
   }
 );
 

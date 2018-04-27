@@ -6,6 +6,7 @@ export const COMMON_MARGIN = 10;
 export const COMMON_PADDING = 10;
 export const COMMON_LIST_HEIGHT = 40;
 export const DEVICE_WIDTH = Dimensions.get('window').width;
+export const DEVICE_HEIGHT = Dimensions.get('window').height;
 
 // 颜色
 export const COMMON_WHITE = '#fff';

@@ -4,17 +4,11 @@ export default class HttpUtil {
   static get(url, queryParams) {
     // 处理查询参数
     url = this.handleQueryParams(url, queryParams);
-    let token;
-    storage.load({
-      key: 'token',
-    }).then((ret) => {
-      token = ret;
-    });
 
     const requestHeaders = {};
 
-    if (token) {
-      requestHeaders.Authorization = `Bearer ${token}`;
+    if (global.token) {
+      requestHeaders.Authorization = `Bearer ${global.token}`;
     }
 
     return fetch(url, {
@@ -33,20 +27,20 @@ export default class HttpUtil {
   static post(url, queryParams, bodyParams) {
     url = this.handleQueryParams(url, queryParams);
 
-    let token;
-    storage.load({
-      key: 'token',
-    }).then((ret) => {
-      token = ret;
-    });
+    // let token;
+    // storage.load({
+    //   key: 'token',
+    // }).then((ret) => {
+    //   token = ret;
+    // });
 
     const requestHeaders = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     };
 
-    if (token) {
-      requestHeaders.Authorization = `Bearer ${token}`;
+    if (global.token) {
+      requestHeaders.Authorization = `Bearer ${global.token}`;
     }
 
     return fetch(url, {
@@ -62,27 +56,78 @@ export default class HttpUtil {
     });
   }
 
+  static postFile(url, queryParams, file) {
+    url = this.handleQueryParams(url, queryParams);
+    const formData = new FormData();
+    const fileName = `${(new Date()).valueOf()}.jpg`;
+    const uploadFile = { uri: file.path, type: 'image/jpeg', name: fileName };
+    formData.append('logo', uploadFile);
+
+    const requestHeaders = {
+      'Content-Type': 'multipart/form-data',
+    };
+
+    if (global.token) requestHeaders.Authorization = `Bearer ${global.token}`;
+
+    return fetch(url, {
+      method: 'POST',
+      headers: requestHeaders,
+      body: formData,
+    }).then((response) => {
+      // 共通错误处理
+      if (response.status >= 400) {
+        return Promise.reject(response);
+      }
+      return Promise.resolve(response.json());
+    });
+  }
+
   static put(url, queryParams, bodyParams) {
     url = this.handleQueryParams(url, queryParams);
 
-    let token;
-    storage.load({
-      key: 'token',
-    }).then((ret) => {
-      token = ret;
-    });
+    // let token;
+    // storage.load({
+    //   key: 'token',
+    // }).then((ret) => {
+    //   token = ret;
+    // });
 
     const requestHeaders = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     };
 
-    if (token) {
-      requestHeaders.Authorization = `Bearer ${token}`;
+    if (global.token) {
+      requestHeaders.Authorization = `Bearer ${global.token}`;
     }
 
     return fetch(url, {
       method: 'PUT',
+      headers: requestHeaders,
+      body: JSON.stringify(bodyParams),
+    }).then((response) => {
+      // 共通错误处理
+      if (response.status >= 400) {
+        return Promise.reject(response);
+      }
+      return Promise.resolve(response.json());
+    });
+  }
+
+  static patch(url, queryParams, bodyParams) {
+    url = this.handleQueryParams(url, queryParams);
+
+    const requestHeaders = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    // token存在
+    if (global.token) {
+      requestHeaders.Authorization = `Bearer ${global.token}`;
+    }
+    return fetch(url, {
+      method: 'PATCH',
       headers: requestHeaders,
       body: JSON.stringify(bodyParams),
     }).then((response) => {

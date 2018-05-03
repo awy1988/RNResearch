@@ -155,4 +155,42 @@ export default class ApiService {
   static loadMore(nextUrl) {
     return HttpUtil.get(`${BASE_URL}${nextUrl}`);
   }
+
+  static updateUserProfile({ logo,
+    name,
+    username,
+    signature,
+    gender,
+    birthday,
+  }) {
+    // 更新用户信息
+    const url = `${BASE_URL}/user/profile`;
+
+    const bodyParams = {};
+
+    if (logo) bodyParams.logo = logo;
+    if (name) bodyParams.name = name;
+    if (username) bodyParams.username = username;
+    if (signature) bodyParams.signature = signature;
+    if (gender) bodyParams.gender = gender;
+    if (birthday) bodyParams.birthday = birthday;
+
+    console.log(url);
+    console.log(bodyParams);
+    return HttpUtil.patch(url, null, bodyParams);
+  }
+
+  static uploadImage(image, purpose) {
+    let url = '';
+    switch (purpose) {
+      case 'user-logos':
+        url = `${BASE_URL}/files/user-logos`;
+        return HttpUtil.postFile(url, null, image);
+      case 'comment-images':
+        // TODO 发表评论时上传文件
+        break;
+      default:
+        break;
+    }
+  }
 }

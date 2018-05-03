@@ -52,7 +52,12 @@ const TabContainer = TabNavigator(
 const StackContainer = StackNavigator(
   {
     WelcomePage: { screen: WelcomePage },
-    Tabs: { screen: TabContainer },
+    Tabs: {
+      screen: TabContainer,
+      navigationOptions: {
+        header: null,
+      },
+    },
     AccountInfo: { screen: AccountInfo },
     Setting: { screen: Setting },
     Login: { screen: LoginContainer },

@@ -7,6 +7,10 @@ class Setting extends React.Component {
     storage.remove({
       key: 'user',
     });
+    storage.remove({
+      key: 'token',
+    });
+    global.token = '';
   }
 
   render() {

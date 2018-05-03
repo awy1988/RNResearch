@@ -1,8 +1,12 @@
 import React from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { Image, Text, View, StyleSheet } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import Swiper from 'react-native-swiper';
 import { COMMON_THEME_COLOR, COMMON_WHITE, DEVICE_HEIGHT, DEVICE_WIDTH } from '../constants/StyleConstants';
+import {loginAction, loginCheckCaptchaAction} from "../actions/auth/loginActions";
+import {connect} from "react-redux";
+import {systemStartupAction} from "../actions/SystemActions";
 
 class WelcomePage extends React.Component {
   static navigationOptions = () => ({
@@ -10,7 +14,9 @@ class WelcomePage extends React.Component {
   });
 
   componentDidMount() {
+    // setTimeout(() => {
     SplashScreen.hide();
+    // }, 3000);
   }
 
   render() {
@@ -26,7 +32,8 @@ class WelcomePage extends React.Component {
           <Image style={style.slideImage} source={require('../../img/guide_03.png')} />
           <Text style={style.nextButton}
             onPress={() => {
-            this.props.navigation.navigate('Tabs');
+              this.props.startup();
+              this.props.navigation.replace('Tabs');
           }}
           >立即体验
           </Text>
@@ -60,4 +67,19 @@ const style = StyleSheet.create({
   },
 });
 
-export default WelcomePage;
+
+/* =============================================================================
+ container组件定义
+============================================================================= */
+const mapStateToProps = (state) => {
+
+  return {
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  startup: () => dispatch(systemStartupAction()),
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(WelcomePage);

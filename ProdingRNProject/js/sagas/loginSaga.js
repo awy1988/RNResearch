@@ -22,7 +22,7 @@ export function* requestUserLogin(action) {
     LoginService.saveUserInfo(responseBody.data);
     LoginService.saveToken(responseBody.data.accessToken);
 
-    yield put(loginSuccessAction());
+    yield put(loginSuccessAction(responseBody.data));
   } catch (e) {
     const errorInfo = yield call(handleError, e);
     if (errorInfo && errorInfo.error && errorInfo.error.message) {

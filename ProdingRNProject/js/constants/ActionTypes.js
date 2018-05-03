@@ -1,4 +1,4 @@
-
+import 'core-js/es6/symbol';
 // 登录
 const login = {
   REQUEST_USER_LOGIN: Symbol('REQUEST_USER_LOGIN'),
@@ -32,4 +32,13 @@ const main = {
   FETCH_ITEMS_ADVERTISEMENT_SUCCESS: Symbol('FETCH_ITEMS_ADVERTISEMENT_SUCCESS'),
 };
 
-export { login, resetPassword, main };
+const user = {
+  USER_INFO_UPDATE: Symbol('USER_INFO_UPDATE'),
+};
+
+const system = {
+  SYSTEM_START_UP: Symbol('SYSTEM_START_UP'),
+  SYSTEM_START_UP_COMPLETE: Symbol('SYSTEM_START_UP_COMPLETE'),
+};
+
+export { login, resetPassword, main, user, system };

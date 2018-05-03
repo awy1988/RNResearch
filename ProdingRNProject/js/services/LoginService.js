@@ -15,7 +15,9 @@ class LoginService {
       data: token,
       expires: null,
     });
+    global.token = token;
   }
+
 }
 
 export default LoginService;

@@ -14,3 +14,12 @@ const storage = new Storage({
 
 // 将storage对象加入全局变量
 global.storage = storage;
+// 全局token变量，在登陆时，写入global，如果
+global.token = '';
+storage.load({
+  key: 'token',
+}).then((ret) => {
+  global.token = ret;
+}).catch(() => {
+  global.token = '';
+});

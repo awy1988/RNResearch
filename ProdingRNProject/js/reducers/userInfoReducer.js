@@ -18,6 +18,11 @@ const user = (state = initialState, action) => {
         ...state,
         ...action.payload.user, // 此时payload为 {user:{...}}
       };
+    case types.system.FETCH_USER_INFO_COMPLETE: // 更新用户信息结束
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       break;
   }

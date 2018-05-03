@@ -10,7 +10,6 @@ export default class HttpUtil {
     if (global.token) {
       requestHeaders.Authorization = `Bearer ${global.token}`;
     }
-
     return fetch(url, {
       method: 'GET',
       headers: requestHeaders,

@@ -10,6 +10,7 @@ import ToastUtil from '../../../util/ToastUtil';
 import { connect } from 'react-redux';
 import { loginAction, loginCheckCaptchaAction } from '../../../actions/auth/loginActions';
 import { BASE_URL } from '../../../constants/ApiConstants';
+import {fetchUserInfoAction} from "../../../actions/SystemActions";
 
 /**
  * 用户信息
@@ -31,6 +32,8 @@ class AccountInfo extends React.Component {
         .then((response) => {
           console.log(response);
           ToastUtil.showToast('头像更改成功');
+          // 更新用户信息
+          this.props.fetchUserInfo();
         }).catch((e) => {
           console.log(e);
           e.json().then((err) => {
@@ -126,18 +129,13 @@ const style = StyleSheet.create({
  container组件定义
 ============================================================================= */
 const mapStateToProps = (state) => {
-  console.log(state);
-
   return {
     user: state.user,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  login: (username, password, captcha = '', captchaHash = '') => dispatch(loginAction({
-    username, password, captcha, captchaHash,
-  })),
-  checkCaptcha: (actionType, actionKey) => dispatch(loginCheckCaptchaAction({ actionType, actionKey })),
+  fetchUserInfo: () => dispatch(fetchUserInfoAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountInfo);

@@ -180,6 +180,12 @@ export default class ApiService {
     return HttpUtil.patch(url, null, bodyParams);
   }
 
+  static fetchUserProfile() {
+    // 获取用户信息
+    const url = `${BASE_URL}/user/profile`;
+    return HttpUtil.get(url);
+  }
+
   static uploadImage(image, purpose) {
     let url = '';
     switch (purpose) {

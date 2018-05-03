@@ -1,7 +1,10 @@
 import { takeEvery } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
 import * as types from '../constants/ActionTypes';
-import { systemStartupCompleteAction } from '../actions/SystemActions';
+import {fetchUserInfoCompleteAction, systemStartupCompleteAction} from '../actions/SystemActions';
+import HttpUtil from "../util/HttpUtil";
+import ApiService from "../network/ApiService";
+import LoginService from "../services/LoginService";
 
 
 export function* systemStartup(action) {
@@ -17,7 +20,24 @@ export function* systemStartup(action) {
   }
 }
 
+export function* fetchUserInfo(action) {
+  // 更新用户信息
+  try {
+    const responseBody = yield call(ApiService.fetchUserProfile);
+    // 更新本地存储的用户信息
+    console.log(responseBody);
+    LoginService.saveUserInfo(responseBody.data);
+    yield put(fetchUserInfoCompleteAction(responseBody.data));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 
 export function* watchSystemStartup() {
   yield takeEvery(types.system.SYSTEM_START_UP, systemStartup);
+}
+
+export function* watchFetchUserInfo() {
+  yield takeEvery(types.system.FETCH_USER_INFO, fetchUserInfo);
 }

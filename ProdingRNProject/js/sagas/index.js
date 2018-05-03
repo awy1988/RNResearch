@@ -6,7 +6,7 @@ import {
   watchGetMobileVCodeSecondStep,
 } from './resetPwdSaga';
 import { watchFetchItemAdvertisement, watchFetchItems, watchFetchItemsLoadMore } from './mainSaga';
-import { watchSystemStartup } from './systemSaga';
+import { watchSystemStartup, watchFetchUserInfo } from './systemSaga';
 
 
 export default function* rootSaga() {
@@ -21,5 +21,6 @@ export default function* rootSaga() {
     watchFetchItemsLoadMore(),
     watchFetchItemAdvertisement(),
     watchSystemStartup(),
+    watchFetchUserInfo(),
   ];
 }

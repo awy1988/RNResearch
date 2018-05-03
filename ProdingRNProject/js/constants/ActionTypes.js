@@ -32,13 +32,11 @@ const main = {
   FETCH_ITEMS_ADVERTISEMENT_SUCCESS: Symbol('FETCH_ITEMS_ADVERTISEMENT_SUCCESS'),
 };
 
-const user = {
-  USER_INFO_UPDATE: Symbol('USER_INFO_UPDATE'),
-};
-
 const system = {
   SYSTEM_START_UP: Symbol('SYSTEM_START_UP'),
   SYSTEM_START_UP_COMPLETE: Symbol('SYSTEM_START_UP_COMPLETE'),
+  FETCH_USER_INFO: Symbol('FETCH_USER_INFO'),
+  FETCH_USER_INFO_COMPLETE: Symbol('FETCH_USER_INFO_COMPLETE'),
 };
 
-export { login, resetPassword, main, user, system };
+export { login, resetPassword, main, system };

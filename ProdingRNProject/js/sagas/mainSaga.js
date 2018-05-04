@@ -4,7 +4,7 @@ import * as types from '../constants/ActionTypes';
 import ApiService from '../network/ApiService';
 import ToastUtil from '../util/ToastUtil';
 import {
-  fetchItemsAdvertisementSuccessAction,
+  fetchItemsAdvertisementSuccessAction, fetchItemsCategoriesSuccessAction,
   fetchItemsLoadMoreSuccessAction,
   fetchItemsSuccessAction,
 } from '../actions/mainActions';
@@ -47,6 +47,22 @@ function* requestFetchItemsAdvertisement(action) {
     console.log(responseBody);
     yield put(fetchItemsAdvertisementSuccessAction({ advertisements: responseBody.data }));
   } catch (e) {
+    console.log(e);
+    const errorInfo = yield call(handleError, e);
+    if (errorInfo && errorInfo.error && errorInfo.error.message) {
+      ToastUtil.showToast(errorInfo.error.message);
+    }
+  }
+}
+
+
+function* requestFetchItemsCategories(action) {
+  // 首页轮播广告
+  try {
+    const responseBody = yield call(ApiService.fetchItemCategories);
+    console.log(responseBody);
+    yield put(fetchItemsCategoriesSuccessAction({ categories: responseBody.data }));
+  } catch (e) {
     const errorInfo = yield call(handleError, e);
     if (errorInfo && errorInfo.error && errorInfo.error.message) {
       ToastUtil.showToast(errorInfo.error.message);
@@ -65,3 +81,8 @@ export function* watchFetchItemsLoadMore() {
 export function* watchFetchItemAdvertisement() {
   yield takeEvery(types.main.FETCH_ITEMS_ADVERTISEMENT, requestFetchItemsAdvertisement);
 }
+
+export function* watchFetchItemCategories() {
+  yield takeEvery(types.main.FETCH_ITEMS_CATEGORIES, requestFetchItemsCategories);
+}
+

@@ -186,6 +186,17 @@ export default class ApiService {
     return HttpUtil.get(url);
   }
 
+  static fetchItemCategories(parent) {
+    const url = `${BASE_URL}/item-categories`;
+    const queryParams = {};
+    if (parent) {
+      queryParams.parent = parent;
+    } else {
+      queryParams.parent = 'none';
+    }
+    return HttpUtil.get(url, queryParams);
+  }
+
   static uploadImage(image, purpose) {
     let url = '';
     switch (purpose) {

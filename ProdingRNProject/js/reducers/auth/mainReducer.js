@@ -34,6 +34,11 @@ export default main = (state = initialState, action) => {
         ...state,
         advertisements: action.payload.advertisements,
       };
+    case types.main.FETCH_ITEMS_CATEGORIES_SUCCESS:
+      return {
+        ...state,
+        categories: action.payload.categories,
+      };
     default:
       break;
   }

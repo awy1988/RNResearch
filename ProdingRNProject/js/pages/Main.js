@@ -4,16 +4,23 @@ import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Swiper from 'react-native-swiper';
 import SplashScreen from 'react-native-splash-screen';
-import { fetchItemsAction, fetchItemsAdvertisementAction, fetchItemsLoadMoreAction } from '../actions/mainActions';
+import {
+  fetchItemsAction,
+  fetchItemsAdvertisementAction,
+  fetchItemsCategoriesAction,
+  fetchItemsLoadMoreAction
+} from '../actions/mainActions';
 import {
   COMMON_DANGER_COLOR,
-  COMMON_DIVIDER_COLOR,
-  COMMON_PADDING,
+  COMMON_DIVIDER_COLOR, COMMON_FONT_SIZE_LEVEL_4,
+  COMMON_PADDING, COMMON_PRIMARY_FONT_COLOR,
   COMMON_SECONDARY_FONT_COLOR,
   COMMON_WHITE, DEVICE_WIDTH,
 } from '../constants/StyleConstants';
 import { BASE_URL } from '../constants/ApiConstants';
 import ListDividerLine from '../components/common/ListDividerLine';
+import {UltimateListView} from "react-native-ultimate-listview";
+import GridView from "react-native-gridview";
 
 
 class ListHeader extends React.Component {
@@ -45,16 +52,40 @@ class ListHeader extends React.Component {
     // });
   };
 
+  renderGridItem = () => {
+    return (
+      <View style={{width:100, height:40}}>
+        <Text>helloworld</Text>
+      </View>
+    );
+  };
+
   render() {
     return (
-      <Swiper style={listHeaderStyle.container}>
+      <View>
+        <Swiper style={listHeaderStyle.container}>
 
-        {
-          this.props.advertisements.map((value) => {
-            return this.renderBanner(value.coverLarge, value.link);
-          })
-        }
-      </Swiper>
+          {
+            this.props.advertisements.map((value) => {
+              return this.renderBanner(value.coverLarge, value.link);
+            })
+          }
+        </Swiper>
+        <FlatList
+          data={this.props.categories}
+          renderItem={({item}) => (
+            <View style={listHeaderStyle.headerCategoryItemContainer}>
+              <Image
+                style={listHeaderStyle.headerCategoryItemLogo}
+                source={{ uri: `${BASE_URL}${item.logo}` }}
+              />
+              <Text style={listHeaderStyle.headerCategoryItemText}>{item.text}</Text>
+            </View>
+          )}
+          horizontal={false}
+          numColumns={4}
+        />
+      </View>
     );
   }
 }
@@ -73,7 +104,7 @@ class Main extends React.Component {
 
     renderHeader() {
       return (
-        <ListHeader advertisements={this.props.advertisements} navigation={this.props.navigation} />
+        <ListHeader advertisements={this.props.advertisements} navigation={this.props.navigation} categories={this.props.categories} />
       );
     }
 
@@ -87,9 +118,9 @@ class Main extends React.Component {
 
     componentDidMount() {
       // 发送获取首页数据的Action
-      SplashScreen.hide();
       this.props.getItems('21', '02', '121.526363', '38.859562');
       this.props.getAdvertisements('normal', 'item');
+      this.props.getItemCategories();
     }
 
     render() {
@@ -128,6 +159,9 @@ class Main extends React.Component {
               }
             }}
           />
+          <View style={listHeaderStyle.headerTitleBarContainer}>
+
+          </View>
         </View>
       );
     }
@@ -178,6 +212,33 @@ const listHeaderStyle = StyleSheet.create({
     height: DEVICE_WIDTH / 2.3,
     resizeMode: 'cover',
   },
+  headerTitleBarContainer: {
+    width: DEVICE_WIDTH,
+    height: 40,
+    position: 'absolute',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)',
+  },
+  headerCategoryContainer: {
+    height: 180,
+  },
+  headerCategoryItemContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 90,
+    backgroundColor: COMMON_WHITE,
+  },
+  headerCategoryItemLogo: {
+    width: 40,
+    height: 40,
+  },
+  headerCategoryItemText: {
+    marginTop: 6,
+    color: COMMON_PRIMARY_FONT_COLOR,
+    fontSize: COMMON_FONT_SIZE_LEVEL_4,
+  },
+
 });
 
 const listFooterStyle = StyleSheet.create({
@@ -237,6 +298,7 @@ const mapDispatchToProps = dispatch => ({
   getItems: (province, city, longitude, latitude) => dispatch(fetchItemsAction({ province, city, longitude, latitude })),
   getItemsLoadMore: nextUrl => dispatch(fetchItemsLoadMoreAction({ nextUrl })),
   getAdvertisements: (status, type) => dispatch(fetchItemsAdvertisementAction({ status, type })),
+  getItemCategories: () => dispatch(fetchItemsCategoriesAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

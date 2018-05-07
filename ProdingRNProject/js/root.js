@@ -25,6 +25,7 @@ import ResetPwdFirstStep from './pages/auth/ResetPwdFirstStep';
 import ResetPwdSecondStep from './pages/auth/ResetPwdSecondStep';
 import ResetPwdThirdStep from './pages/auth/ResetPwdThirdStep';
 import WebViewPage from './pages/WebViewPage';
+import QrCodeScan from "./pages/qrcode/QrCodeScan";
 
 const TabContainer = TabNavigator(
   {
@@ -54,6 +55,12 @@ const StackContainer = StackNavigator(
     WelcomePage: { screen: WelcomePage },
     Tabs: {
       screen: TabContainer,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    QrCodeScan: {
+      screen: QrCodeScan,
       navigationOptions: {
         header: null,
       },

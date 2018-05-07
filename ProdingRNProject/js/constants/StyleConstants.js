@@ -11,6 +11,9 @@ export const DEVICE_HEIGHT = Dimensions.get('window').height;
 
 // 字体大小
 export const COMMON_PAGE_TITLE_FONT_SIZE = 16;
+export const COMMON_FONT_SIZE_LEVEL_1 = 18;
+export const COMMON_FONT_SIZE_LEVEL_2 = 16;
+export const COMMON_FONT_SIZE_LEVEL_3 = 14;
 export const COMMON_FONT_SIZE_LEVEL_4 = 12;
 
 // 颜色

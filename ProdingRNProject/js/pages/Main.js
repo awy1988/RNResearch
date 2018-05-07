@@ -1,27 +1,32 @@
 import React from 'react';
-import {Text, View, FlatList, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
+import { Text, View, FlatList, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Swiper from 'react-native-swiper';
-import SplashScreen from 'react-native-splash-screen';
 import {
   fetchItemsAction,
   fetchItemsAdvertisementAction,
   fetchItemsCategoriesAction,
-  fetchItemsLoadMoreAction
+  fetchItemsLoadMoreAction,
 } from '../actions/mainActions';
 import {
   COMMON_DANGER_COLOR,
-  COMMON_DIVIDER_COLOR, COMMON_FONT_SIZE_LEVEL_4,
-  COMMON_PADDING, COMMON_PRIMARY_FONT_COLOR,
+  COMMON_DIVIDER_COLOR,
+  COMMON_FONT_SIZE_LEVEL_1,
+  COMMON_FONT_SIZE_LEVEL_2,
+  COMMON_FONT_SIZE_LEVEL_3,
+  COMMON_FONT_SIZE_LEVEL_4,
+  COMMON_MARGIN,
+  COMMON_PADDING,
+  COMMON_PRIMARY_FONT_COLOR,
   COMMON_SECONDARY_FONT_COLOR,
-  COMMON_WHITE, DEVICE_WIDTH,
+  COMMON_WHITE,
+  DEVICE_WIDTH,
 } from '../constants/StyleConstants';
 import { BASE_URL } from '../constants/ApiConstants';
 import ListDividerLine from '../components/common/ListDividerLine';
-import {UltimateListView} from "react-native-ultimate-listview";
-import GridView from "react-native-gridview";
-
+import ToastUtil from "../util/ToastUtil";
+var QRCode = require('@remobile/react-native-qrcode-local-image');
 
 class ListHeader extends React.Component {
   constructor(props) {
@@ -54,7 +59,7 @@ class ListHeader extends React.Component {
 
   renderGridItem = () => {
     return (
-      <View style={{width:100, height:40}}>
+      <View style={{ width: 100, height: 40 }}>
         <Text>helloworld</Text>
       </View>
     );
@@ -73,7 +78,7 @@ class ListHeader extends React.Component {
         </Swiper>
         <FlatList
           data={this.props.categories}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <View style={listHeaderStyle.headerCategoryItemContainer}>
               <Image
                 style={listHeaderStyle.headerCategoryItemLogo}
@@ -159,7 +164,33 @@ class Main extends React.Component {
               }
             }}
           />
-          <View style={listHeaderStyle.headerTitleBarContainer}>
+          <View style={titleBarStyle.container}>
+            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={titleBarStyle.addressText}>大连</Text>
+              <Icon name="ios-arrow-down" style={titleBarStyle.addressTextArrowDown} />
+            </TouchableOpacity>
+            <TouchableWithoutFeedback>
+              <View style={titleBarStyle.searchContainer}>
+                <Icon name="ios-search-outline" style={titleBarStyle.searchIcon} />
+                <Text style={titleBarStyle.searchHint}>商品名称</Text>
+              </View>
+            </TouchableWithoutFeedback>
+
+            <TouchableOpacity onPress={() => {
+              this.props.navigation.navigate('QrCodeScan');
+            }}>
+              <Icon name="ios-qr-scanner-outline" style={titleBarStyle.scanIcon} />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => {
+              QRCode.decode('https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=1761723146,2435534986&fm=58&bpow=380&bpoh=380', (error, result) => {
+                console.log(error);
+                console.log(result);
+                ToastUtil.showToast(result);
+              });
+            }}>
+              <Icon name="ios-notifications-outline" style={titleBarStyle.scanIcon} />
+            </TouchableOpacity>
 
           </View>
         </View>
@@ -202,6 +233,52 @@ const styles = StyleSheet.create({
   },
 });
 
+const titleBarStyle = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: DEVICE_WIDTH,
+    height: 40,
+    paddingLeft: COMMON_PADDING,
+    paddingRight: COMMON_PADDING,
+    position: 'absolute',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)',
+  },
+  addressText: {
+    color: COMMON_WHITE,
+    fontSize: COMMON_FONT_SIZE_LEVEL_3,
+  },
+  addressTextArrowDown: {
+    color: COMMON_WHITE,
+    fontSize: COMMON_FONT_SIZE_LEVEL_3,
+    marginLeft: 2,
+  },
+  searchContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    height: 24,
+    alignItems: 'center',
+    backgroundColor: COMMON_WHITE,
+    marginLeft: COMMON_MARGIN,
+    borderRadius: 10,
+  },
+  searchIcon: {
+    color: COMMON_SECONDARY_FONT_COLOR,
+    fontSize: COMMON_FONT_SIZE_LEVEL_2,
+    marginLeft: 6,
+  },
+  searchHint: {
+    color: COMMON_SECONDARY_FONT_COLOR,
+    fontSize: COMMON_FONT_SIZE_LEVEL_3,
+    marginLeft: 6,
+  },
+  scanIcon: {
+    color: COMMON_WHITE,
+    fontSize: COMMON_FONT_SIZE_LEVEL_1,
+    marginLeft: COMMON_MARGIN,
+  },
+});
+
 const listHeaderStyle = StyleSheet.create({
   container: {
     width: DEVICE_WIDTH,
@@ -212,12 +289,7 @@ const listHeaderStyle = StyleSheet.create({
     height: DEVICE_WIDTH / 2.3,
     resizeMode: 'cover',
   },
-  headerTitleBarContainer: {
-    width: DEVICE_WIDTH,
-    height: 40,
-    position: 'absolute',
-    backgroundColor: 'rgba(52, 52, 52, 0.8)',
-  },
+
   headerCategoryContainer: {
     height: 180,
   },

@@ -4,11 +4,9 @@ import ActionSheet from 'react-native-actionsheet';
 import ImagePicker from 'react-native-image-crop-picker';
 import ProfileInfoListItem from '../ProfileInfoListItem';
 import { COMMON_MARGIN, COMMON_PADDING, COMMON_WHITE } from '../../../constants/StyleConstants';
-import HttpUtil from '../../../util/HttpUtil';
 import ApiService from '../../../network/ApiService';
 import ToastUtil from '../../../util/ToastUtil';
 import { connect } from 'react-redux';
-import { loginAction, loginCheckCaptchaAction } from '../../../actions/auth/loginActions';
 import { BASE_URL } from '../../../constants/ApiConstants';
 import {fetchUserInfoAction} from "../../../actions/SystemActions";
 

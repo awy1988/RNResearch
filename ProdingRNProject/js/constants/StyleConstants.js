@@ -18,6 +18,7 @@ export const COMMON_FONT_SIZE_LEVEL_4 = 12;
 
 // 颜色
 export const COMMON_WHITE = '#fff';
+export const COMMON_BLACK = '#000';
 export const COMMON_THEME_COLOR = '#2f9bff';
 export const COMMON_DIVIDER_COLOR = '#e1e1e1';
 export const COMMON_DANGER_COLOR = '#f4333c';

@@ -197,6 +197,12 @@ export default class ApiService {
     return HttpUtil.get(url, queryParams);
   }
 
+  static fetchAddressList(userId) {
+    // 获取用户收货地址列表
+    const url = `${BASE_URL}/users/${userId}/consignees`;
+    return HttpUtil.get(url);
+  }
+
   static uploadImage(image, purpose) {
     let url = '';
     switch (purpose) {

@@ -9,6 +9,7 @@
   "dependencies": {
     "@remobile/react-native-qrcode-local-image": "^1.0.4",
     "babel-preset-react-native": "4.0.0",
+    "lodash": "^4.17.10",
     "prop-types": "^15.6.1",
     "react": "^16.3.0-alpha.1",
     "react-native": "0.54.3",

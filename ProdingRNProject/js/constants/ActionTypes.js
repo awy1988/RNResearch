@@ -41,4 +41,11 @@ const system = {
   FETCH_USER_INFO_COMPLETE: Symbol('FETCH_USER_INFO_COMPLETE'),
 };
 
-export { login, resetPassword, main, system };
+const address = {
+  FETCH_ADDRESS_LIST: Symbol('FETCH_ADDRESS_LIST'),
+  FETCH_ADDRESS_LIST_COMPLETE: Symbol('FETCH_ADDRESS_LIST_COMPLETE'),
+  SET_DEFAULT_ADDRESS: Symbol('SET_DEFAULT_ADDRESS'),
+  DELETE_ADDRESS: Symbol('DELETE_ADDRESS'),
+};
+
+export { login, resetPassword, main, system, address };

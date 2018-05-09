@@ -12,6 +12,7 @@ import {
   watchFetchItemsLoadMore,
 } from './mainSaga';
 import { watchSystemStartup, watchFetchUserInfo } from './systemSaga';
+import { watchFetchAddressList } from './addressSaga';
 
 
 export default function* rootSaga() {
@@ -28,5 +29,6 @@ export default function* rootSaga() {
     watchSystemStartup(),
     watchFetchUserInfo(),
     watchFetchItemCategories(),
+    watchFetchAddressList(),
   ];
 }

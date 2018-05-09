@@ -3,8 +3,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { COMMON_LIST_HEIGHT, COMMON_MARGIN, COMMON_PADDING, COMMON_WHITE } from '../../constants/StyleConstants';
 
-
-
 export default class ProfileInfoListItem extends React.Component {
   // TODO 1.用Props将这里面的数据动态化
 

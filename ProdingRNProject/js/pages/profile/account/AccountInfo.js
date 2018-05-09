@@ -62,7 +62,9 @@ class AccountInfo extends React.Component {
           message={this.props.user.gender ? (this.props.user.gender === 'male' ? '男' : '女') : ''}
           marginTop={1}
         />
-        <ProfileInfoListItem title="地址管理" marginTop={1} />
+        <ProfileInfoListItem title="地址管理" marginTop={1} onPress={() => {
+          this.props.navigation.navigate('AddressList');
+        }} />
         <ProfileInfoListItem title="密码" marginTop={COMMON_MARGIN} />
         <ProfileInfoListItem title="手机" message={this.props.user.mobile} marginTop={1} hideArrow />
         <ProfileInfoListItem title="个性签名" message={this.props.user.signature} marginTop={1} />

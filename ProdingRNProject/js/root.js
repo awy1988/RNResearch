@@ -27,6 +27,7 @@ import ResetPwdThirdStep from './pages/auth/ResetPwdThirdStep';
 import WebViewPage from './pages/WebViewPage';
 import QrCodeScan from "./pages/qrcode/QrCodeScan";
 import AddressList from "./pages/profile/address/AddressList";
+import AddressEdit from "./pages/profile/address/AddressEdit";
 
 const TabContainer = TabNavigator(
   {
@@ -68,6 +69,7 @@ const StackContainer = StackNavigator(
     },
     AccountInfo: { screen: AccountInfo },
     AddressList: { screen: AddressList },
+    AddressEdit: { screen: AddressEdit },
     Setting: { screen: Setting },
     Login: { screen: LoginContainer },
     RegisterFirstStep: { screen: RegisterFirstStep },

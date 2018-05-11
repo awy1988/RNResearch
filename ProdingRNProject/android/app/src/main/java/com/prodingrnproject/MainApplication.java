@@ -3,14 +3,16 @@ package com.prodingrnproject;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.lwansbrough.RCTCamera.RCTCameraPackage;
-import com.remobile.qrcodeLocalImage.RCTQRCodeLocalImagePackage;
-import com.reactnative.ivpusic.imagepicker.PickerPackage;
-import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.lwansbrough.RCTCamera.RCTCameraPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import com.remobile.qrcodeLocalImage.RCTQRCodeLocalImagePackage;
+import com.lynxit.contactswrapper.ContactsWrapperPackage;
+
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +32,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RCTCameraPackage(),
             new RCTQRCodeLocalImagePackage(),
             new PickerPackage(),
-            new SplashScreenReactPackage()
+            new SplashScreenReactPackage(),
+            new ContactsWrapperPackage()
       );
     }
 

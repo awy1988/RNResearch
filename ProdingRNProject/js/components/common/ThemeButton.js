@@ -1,6 +1,8 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { COMMON_LIST_HEIGHT, COMMON_THEME_COLOR, COMMON_WHITE } from '../../constants/StyleConstants';
+
 
 /**
  * 主题样式按钮
@@ -14,9 +16,14 @@ class ThemeButton extends React.Component {
         activeOpacity={this.props.activeOpacity}
         onPress={this.props.onPress}
       >
+        {this.props.icon ? this.showLeftIcon(this.props.icon) : null}
         <Text style={[style.btnText, this.props.btnTextStyle]}>{this.props.text}</Text>
       </TouchableOpacity>
     );
+  }
+
+  showLeftIcon(iconName) {
+    return (<Icon name={iconName} style={[style.icon, this.props.iconStyle]} />);
   }
 }
 
@@ -36,6 +43,11 @@ const style = StyleSheet.create({
   btnText: {
     color: COMMON_WHITE,
     fontSize: 16,
+  },
+  icon: {
+    color: COMMON_WHITE,
+    fontSize: 18,
+    marginRight: 4,
   },
 });
 

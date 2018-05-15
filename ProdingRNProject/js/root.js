@@ -28,6 +28,7 @@ import WebViewPage from './pages/WebViewPage';
 import QrCodeScan from "./pages/qrcode/QrCodeScan";
 import AddressList from "./pages/profile/address/AddressList";
 import AddressEdit from "./pages/profile/address/AddressEdit";
+import MapSearch from "./pages/profile/address/MapSearch";
 
 const TabContainer = TabNavigator(
   {
@@ -70,6 +71,7 @@ const StackContainer = StackNavigator(
     AccountInfo: { screen: AccountInfo },
     AddressList: { screen: AddressList },
     AddressEdit: { screen: AddressEdit },
+    MapSearch: { screen: MapSearch },
     Setting: { screen: Setting },
     Login: { screen: LoginContainer },
     RegisterFirstStep: { screen: RegisterFirstStep },

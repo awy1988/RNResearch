@@ -7,4 +7,5 @@ export const LOCAL = '';
 
 // 入口
 export const BASE_URL = RELEASE;
+export const BASE_URL_GAODE_API = 'http://restapi.amap.com/v3';
 

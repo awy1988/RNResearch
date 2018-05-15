@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Text, TextInput, View, StyleSheet, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import ContactsWrapper from 'react-native-contacts-wrapper';
 import ListDividerLine from '../../../components/common/ListDividerLine';
 import {
   COMMON_DIVIDER_COLOR, COMMON_MARGIN,
@@ -18,6 +17,7 @@ class AddressEdit extends React.Component {
     super(props);
     this.consigneeName = '';
     this.mobile = '';
+    this.onSelectAddressClick = this.onSelectAddressClick.bind(this);
   }
 
   componentDidMount() {
@@ -31,6 +31,10 @@ class AddressEdit extends React.Component {
 
   onConsigneesNameChange(text) {
     this.consigneeName = text;
+  }
+
+  onSelectAddressClick() {
+    this.props.navigation.navigate('MapSearch');
   }
 
   render() {
@@ -73,7 +77,11 @@ class AddressEdit extends React.Component {
           </TouchableWithoutFeedback>
         </View>
         <ListDividerLine />
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            this.onSelectAddressClick();
+          }}
+        >
           <View style={style.listItemContainer}>
             <Text style={style.listItemTitle}>所在地区：</Text>
             <Text

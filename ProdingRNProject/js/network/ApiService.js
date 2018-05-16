@@ -244,4 +244,12 @@ export default class ApiService {
         break;
     }
   }
+
+  static userOrderPayment(userId, orderId) {
+    const url = `${BASE_URL}/users/${userId}/orders/${orderId}/payment`;
+    const bodyParams = {
+      weixin: 'App',
+    };
+    return HttpUtil.post(url, null, bodyParams);
+  }
 }

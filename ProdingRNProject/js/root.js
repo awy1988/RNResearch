@@ -29,6 +29,7 @@ import QrCodeScan from "./pages/qrcode/QrCodeScan";
 import AddressList from "./pages/profile/address/AddressList";
 import AddressEdit from "./pages/profile/address/AddressEdit";
 import MapSearch from "./pages/profile/address/MapSearch";
+import ItemDetail from "./pages/items/ItemDetail";
 
 const TabContainer = TabNavigator(
   {
@@ -68,6 +69,7 @@ const StackContainer = StackNavigator(
         header: null,
       },
     },
+    ItemDetail: { screen: ItemDetail },
     AccountInfo: { screen: AccountInfo },
     AddressList: { screen: AddressList },
     AddressEdit: { screen: AddressEdit },

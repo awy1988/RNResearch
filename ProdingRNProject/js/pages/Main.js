@@ -137,19 +137,28 @@ class Main extends React.Component {
             ListFooterComponent={this.renderFooter}
             ItemSeparatorComponent={ListDividerLine}
             renderItem={({ item }) =>
-                (<View style={listItemStyle.itemContainer}>
-                  <Image style={listItemStyle.itemImage}
-                    source={{ uri: `${BASE_URL}${item.cover}` }}
-                    borderRadius={4}
-                  />
-                  <View style={listItemStyle.rightContainer}>
-                    <Text numberOfLines={2}>{item.name}</Text>
-                    <View style={listItemStyle.rightContainerBottom}>
-                      <Text style={listItemStyle.itemPrice}>{`￥${item.price}`}</Text>
-                      <Text style={listItemStyle.itemDistance}>{item.distance}</Text>
+                (
+                  <TouchableWithoutFeedback
+                    onPress={
+                      () => {
+                        this.props.navigation.navigate('ItemDetail');
+                      }
+                    }
+                  >
+                    <View style={listItemStyle.itemContainer}>
+                      <Image style={listItemStyle.itemImage}
+                        source={{ uri: `${BASE_URL}${item.cover}` }}
+                        borderRadius={4}
+                      />
+                      <View style={listItemStyle.rightContainer}>
+                        <Text numberOfLines={2}>{item.name}</Text>
+                        <View style={listItemStyle.rightContainerBottom}>
+                          <Text style={listItemStyle.itemPrice}>{`￥${item.price}`}</Text>
+                          <Text style={listItemStyle.itemDistance}>{item.distance}</Text>
+                        </View>
+                      </View>
                     </View>
-                  </View>
-                </View>)
+                  </TouchableWithoutFeedback>)
               }
             onRefresh={() => {
               this.props.getItems('21', '02', '121.526363', '38.859562');

@@ -6,6 +6,7 @@ const initialState = {
     name: '',
     mobile: '',
   },
+  createAddressSuccess: false,
 };
 
 
@@ -21,9 +22,29 @@ export default address = (state = initialState, action) => {
       return {
         ...state,
         selectedAddress: {
+          ...state.selectedAddress,
           name: action.payload.contact.name,
           mobile: action.payload.contact.phone,
         },
+      };
+    case types.address.SELECT_MAP_ADDRESS_COMPLETE:
+      return {
+        ...state,
+        selectedAddress: {
+          ...state.selectedAddress,
+          poiAddress: action.payload.poiAddress,
+        },
+      };
+    case types.address.ADDRESS_EDIT_EXIT:
+      return {
+        ...state,
+        createAddressSuccess: false,
+        selectedAddress: initialState.selectedAddress,
+      };
+    case types.address.CREATE_ADDRESS_SUCCESS:
+      return {
+        ...state,
+        createAddressSuccess: true,
       };
     default:
       break;

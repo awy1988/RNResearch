@@ -17,9 +17,9 @@ import ThemeButton from '../../../components/common/ThemeButton';
  * 用户信息
  */
 class AddressList extends React.Component {
-  // static navigationOptions = {
-  //     headerLeft: ( <Icon name={'md-home'}   /> ),
-  // };
+  static navigationOptions = {
+    title: '收货地址管理',
+  };
 
   constructor(props) {
     super(props);
@@ -34,9 +34,9 @@ class AddressList extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-          <FlatList
-            style={{ flex: 1 }}
-            renderItem={({ item, index }) => {
+        <FlatList
+          style={{ flex: 1 }}
+          renderItem={({ item, index }) => {
               // 第一个位置显示默认地址
               return (
                 <View style={listItemStyle.container}>
@@ -68,7 +68,7 @@ class AddressList extends React.Component {
                       <TouchableWithoutFeedback
                         onPress={
                           () => {
-                            console.log('编辑');
+                            this.props.navigation.navigate('AddressEdit', { type: 'edit', addressInfo: item });
                           }
                         }
                       >
@@ -94,20 +94,19 @@ class AddressList extends React.Component {
                 </View>
               );
             }}
-            data={this.props.addressList}
+          data={this.props.addressList}
 
-            ItemSeparatorComponent={() => {
+          ItemSeparatorComponent={() => {
               return (
                 <ListDividerLine style={{ height: 10 }} />
               );
             }}
-
-          />
+        />
         <View style={pageStyle.createAddressContainer}>
           <ThemeButton
             btnStyle={pageStyle.bottomButton}
             onPress={() => {
-              this.props.navigation.navigate('AddressEdit');
+              this.props.navigation.navigate('AddressEdit', { type: 'create', isDefault: this.props.addressList && this.props.addressList.length > 0 ? false : true });
             }}
             text="新建地址"
             icon="ios-add-outline"

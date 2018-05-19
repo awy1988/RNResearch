@@ -252,4 +252,20 @@ export default class ApiService {
     };
     return HttpUtil.post(url, null, bodyParams);
   }
+
+  static getNearestCity(longitude, latitude) {
+    // 定位，根据经纬度查询城市
+    const url = `${BASE_URL}/nearest-city`;
+    const queryParams = {
+      location: [longitude, latitude],
+    };
+    return HttpUtil.get(url, queryParams);
+  }
+
+  static createAddress(userId, { name, mobile, province, provinceName, city, cityName, district, districtName, address, location, isDefault }) {
+    // 创建收获地址
+    const url = `${BASE_URL}/users/${userId}/consignees`;
+    const bodyParams = { name, mobile, province, provinceName, city, cityName, district, districtName, address, location, isDefault };
+    return HttpUtil.post(url, null, bodyParams);
+  }
 }

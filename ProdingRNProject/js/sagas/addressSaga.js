@@ -1,10 +1,13 @@
 import { takeEvery } from 'redux-saga';
 import { call, put, fork } from 'redux-saga/effects';
 import _ from 'lodash';
+import { NavigationActions } from 'react-navigation';
 import ContactsWrapper from 'react-native-contacts-wrapper';
 import * as types from '../constants/ActionTypes';
 import ApiService from '../network/ApiService';
+
 import {
+  createAddressSuccessAction,
   fetchAddressListAction,
   fetchAddressListCompleteAction,
   selectContactAsConsigneeComplete,
@@ -53,7 +56,7 @@ export function* watchSetDefaultAddress() {
 }
 
 /* =============================================================================
- 地址编辑
+ 地址创建、编辑
 ============================================================================= */
 
 export function* selectContact(action) {
@@ -67,6 +70,55 @@ export function* selectContact(action) {
   }
 }
 
+export function* selectMapAddress(action) {
+  // 地图选址
+  const navigateAction = NavigationActions.navigate({
+    routeName: 'MapSearch',
+  });
+  yield action.payload.navigation.dispatch(navigateAction);
+}
+
+export function* createAddress(action) {
+  // 新增收货地址,分为两步，第一步根据经纬度获取用户所选地址的省市码，第二步添加收货人信息
+  try {
+    const nearestCityResponseBody = yield call(ApiService.getNearestCity, action.payload.longitude, action.payload.latitude);
+    const createAddressResponseBody = yield call(ApiService.createAddress, action.payload.userId, {
+      name: action.payload.name,
+      mobile: action.payload.mobile,
+      province: nearestCityResponseBody.data.province,
+      provinceName: action.payload.provinceName,
+      city: nearestCityResponseBody.data.city,
+      cityName: action.payload.cityName,
+      district: nearestCityResponseBody.data.city,
+      districtName: action.payload.districtName,
+      address: action.payload.address,
+      location: [action.payload.longitude, action.payload.latitude],
+      isDefault: action.payload.isDefault,
+    });
+    yield put(createAddressSuccessAction({ addressInfo: createAddressResponseBody.data }));
+    yield put(fetchAddressListAction({ userId: action.payload.userId }));
+    ToastUtil.showToast('新建地址成功');
+  } catch (e) {
+    // TODO 异常处理
+    console.log(e);
+    e.json().then((ret) => {
+      console.log(ret);
+      if (ret.error && ret.error.message) {
+        ToastUtil.showToast(ret.error.message);
+      }
+    });
+  }
+}
+
 export function* watchSelectContactAsConsignee() {
   yield takeEvery(types.address.SELECT_CONTACT_AS_CONSIGNEE, selectContact);
 }
+
+export function* watchSelectMapAddress() {
+  yield takeEvery(types.address.SELECT_MAP_ADDRESS, selectMapAddress);
+}
+
+export function* watchCreateAddress() {
+  yield takeEvery(types.address.CREATE_ADDRESS, createAddress);
+}
+

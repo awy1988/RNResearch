@@ -12,7 +12,13 @@ import {
   watchFetchItemsLoadMore,
 } from './mainSaga';
 import { watchSystemStartup, watchFetchUserInfo } from './systemSaga';
-import {watchFetchAddressList, watchSelectContactAsConsignee, watchSetDefaultAddress} from './addressSaga';
+import {
+  watchCreateAddress,
+  watchFetchAddressList,
+  watchSelectContactAsConsignee,
+  watchSelectMapAddress,
+  watchSetDefaultAddress
+} from './addressSaga';
 
 
 export default function* rootSaga() {
@@ -32,5 +38,7 @@ export default function* rootSaga() {
     watchFetchAddressList(),
     watchSetDefaultAddress(),
     watchSelectContactAsConsignee(),
+    watchSelectMapAddress(),
+    watchCreateAddress(),
   ];
 }

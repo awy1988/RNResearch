@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { FlatList, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { MapView } from 'react-native-amap3d';
 import _ from 'lodash';
@@ -14,6 +15,11 @@ import ThemeButton from '../../../components/common/ThemeButton';
 import ToastUtil from '../../../util/ToastUtil';
 import ListDividerLine from '../../../components/common/ListDividerLine';
 import GaodeApiService from '../../../network/GaodeApiService';
+import {
+  selectContactAsConsignee,
+  selectMapAddress,
+  selectMapAddressComplete,
+} from '../../../actions/address/addressActions';
 
 
 class SearchInput extends React.Component {
@@ -31,7 +37,7 @@ class SearchInput extends React.Component {
   }
 }
 
-export default class MapSearch extends React.Component {
+class MapSearch extends React.Component {
   constructor(props) {
     super(props);
 
@@ -155,9 +161,6 @@ export default class MapSearch extends React.Component {
                 }
               }
             }
-            onPress={({ nativeEvent }) => {
-              ToastUtil.showToast('onPress is called!!');
-            }}
           />
           <Icon name="ios-pin-outline" style={mapSearchStyles.pinIcon} />
           <FlatList
@@ -220,7 +223,11 @@ export default class MapSearch extends React.Component {
           <ThemeButton btnStyle={mapSearchStyles.confirmBtn}
             text="确定"
             onPress={() => {
-          }}
+              // 需要将选中的数据回传到上一个画面
+              // 回传数据，发送地图选址成功Action，将选择的兴趣点对象作为payload数据
+              this.props.selectMapAddressComplete(this.state.aroundPois[this.state.selectedPosition]);
+              this.props.navigation.goBack();
+            }}
           />
 
         </View>
@@ -301,3 +308,16 @@ const mapSearchStyles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
+/* =============================================================================
+ container组件定义
+============================================================================= */
+const mapStateToProps = (state) => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => ({
+  selectMapAddressComplete: poiAddress => dispatch(selectMapAddressComplete({ poiAddress })),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapSearch);

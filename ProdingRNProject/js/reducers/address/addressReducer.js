@@ -46,6 +46,11 @@ export default address = (state = initialState, action) => {
         ...state,
         createAddressSuccess: true,
       };
+    case types.address.UPDATE_ADDRESS_SUCCESS:
+      return {
+        ...state,
+        createAddressSuccess: true,
+      };
     default:
       break;
   }

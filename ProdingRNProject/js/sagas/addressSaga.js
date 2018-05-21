@@ -10,7 +10,7 @@ import {
   createAddressSuccessAction,
   fetchAddressListAction,
   fetchAddressListCompleteAction,
-  selectContactAsConsigneeComplete,
+  selectContactAsConsigneeComplete, updateAddressSuccessAction,
 } from '../actions/address/addressActions';
 import ToastUtil from '../util/ToastUtil';
 
@@ -110,6 +110,42 @@ export function* createAddress(action) {
   }
 }
 
+export function* updateAddress(action) {
+  try {
+    let nearestCityResponseBody;
+    if (action.payload.longitude && action.payload.latitude) {
+      nearestCityResponseBody = yield call(ApiService.getNearestCity, action.payload.longitude, action.payload.latitude);
+    }
+
+    let updateAddressBodyParams = {
+      name: action.payload.name,
+      mobile: action.payload.mobile,
+      address: action.payload.address,
+      isDefault: action.payload.isDefault,
+    };
+    if (nearestCityResponseBody && nearestCityResponseBody.data) {
+      updateAddressBodyParams = {
+        ...updateAddressBodyParams,
+        province: nearestCityResponseBody.data.province,
+        provinceName: action.payload.provinceName,
+        city: nearestCityResponseBody.data.city,
+        cityName: action.payload.cityName,
+        district: nearestCityResponseBody.data.city,
+        districtName: action.payload.districtName,
+        location: [action.payload.longitude, action.payload.latitude],
+      };
+    }
+
+    yield call(ApiService.updateAddress, action.payload.userId, action.payload.consigneeId, updateAddressBodyParams);
+
+    yield put(updateAddressSuccessAction());
+    yield put(fetchAddressListAction({ userId: action.payload.userId }));
+    ToastUtil.showToast('编辑地址成功');
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export function* watchSelectContactAsConsignee() {
   yield takeEvery(types.address.SELECT_CONTACT_AS_CONSIGNEE, selectContact);
 }
@@ -120,5 +156,9 @@ export function* watchSelectMapAddress() {
 
 export function* watchCreateAddress() {
   yield takeEvery(types.address.CREATE_ADDRESS, createAddress);
+}
+
+export function* watchUpdateAddress() {
+  yield takeEvery(types.address.UPDATE_ADDRESS, updateAddress);
 }
 

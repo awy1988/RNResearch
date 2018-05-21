@@ -17,7 +17,7 @@ import {
   watchFetchAddressList,
   watchSelectContactAsConsignee,
   watchSelectMapAddress,
-  watchSetDefaultAddress
+  watchSetDefaultAddress, watchUpdateAddress
 } from './addressSaga';
 
 
@@ -40,5 +40,6 @@ export default function* rootSaga() {
     watchSelectContactAsConsignee(),
     watchSelectMapAddress(),
     watchCreateAddress(),
+    watchUpdateAddress(),
   ];
 }

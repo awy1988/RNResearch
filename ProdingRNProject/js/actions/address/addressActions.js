@@ -11,4 +11,6 @@ export const selectMapAddress = createAction(types.address.SELECT_MAP_ADDRESS);
 export const selectMapAddressComplete = createAction(types.address.SELECT_MAP_ADDRESS_COMPLETE);
 export const createAddressAction = createAction(types.address.CREATE_ADDRESS);
 export const createAddressSuccessAction = createAction(types.address.CREATE_ADDRESS_SUCCESS);
+export const updateAddressAction = createAction(types.address.UPDATE_ADDRESS);
+export const updateAddressSuccessAction = createAction(types.address.UPDATE_ADDRESS_SUCCESS);
 export const addressEditExitAction = createAction(types.address.ADDRESS_EDIT_EXIT);

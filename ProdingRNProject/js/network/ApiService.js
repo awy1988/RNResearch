@@ -263,9 +263,26 @@ export default class ApiService {
   }
 
   static createAddress(userId, { name, mobile, province, provinceName, city, cityName, district, districtName, address, location, isDefault }) {
-    // 创建收获地址
+    // 创建收货地址
     const url = `${BASE_URL}/users/${userId}/consignees`;
     const bodyParams = { name, mobile, province, provinceName, city, cityName, district, districtName, address, location, isDefault };
     return HttpUtil.post(url, null, bodyParams);
+  }
+  static updateAddress(userId, consigneeId, { name, mobile, province, provinceName, city, cityName, district, districtName, address, location, isDefault }) {
+    // 更新收货地址
+    const url = `${BASE_URL}/users/${userId}/consignees/${consigneeId}`;
+    const bodyParams = {};
+    if (name) bodyParams.name = name;
+    if (mobile) bodyParams.mobile = mobile;
+    if (province) bodyParams.province = province;
+    if (provinceName) bodyParams.provinceName = provinceName;
+    if (city) bodyParams.city = city;
+    if (cityName) bodyParams.cityName = cityName;
+    if (district) bodyParams.district = district;
+    if (districtName) bodyParams.districtName = districtName;
+    if (address) bodyParams.address = address;
+    if (location) bodyParams.location = location;
+    if (isDefault) bodyParams.isDefault = isDefault;
+    return HttpUtil.patch(url, null, bodyParams);
   }
 }

@@ -13,10 +13,9 @@ import ThemeButton from '../../../components/common/ThemeButton';
 import {
   addressEditExitAction, createAddressAction,
   selectContactAsConsignee,
-  selectMapAddress,
+  selectMapAddress, updateAddressAction,
 } from '../../../actions/address/addressActions';
 import ToastUtil from '../../../util/ToastUtil';
-import { createAddress } from '../../../sagas/addressSaga';
 
 class AddressEdit extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -27,6 +26,7 @@ class AddressEdit extends React.Component {
 
   constructor(props) {
     super(props);
+    this.consigneeId = '';
     this.consigneeName = '';
     this.mobile = '';
     this.addressDistrict = '';
@@ -34,12 +34,14 @@ class AddressEdit extends React.Component {
     this.type = this.props.navigation.getParam('type', 'create');
     if (this.type !== 'create') {
       this.addressInfo = this.props.navigation.getParam('addressInfo', {});
+      this.consigneeId = this.addressInfo.id;
       this.consigneeName = this.addressInfo.name;
       this.mobile = this.addressInfo.mobile;
       this.addressDistrict = `${this.addressInfo.provinceName}${this.addressInfo.cityName}${this.addressInfo.districtName}`;
       this.addressDetail = this.addressInfo.address;
     }
     this.isDefault = this.props.navigation.getParam('isDefault', false);
+    this.isMobileEdited = false;
     this.poiAddress = {};
     this.onSelectAddressClick = this.onSelectAddressClick.bind(this);
     this.onSaveBtnClick = this.onSaveBtnClick.bind(this);
@@ -107,14 +109,14 @@ class AddressEdit extends React.Component {
     if (this.formCheck()) {
       if (this.type === 'create') {
         // 新建地址
-        let longitude = this.poiAddress.location.split(',')[0];
-        let latitude = this.poiAddress.location.split(',')[1];
+        const longitude = this.poiAddress.location.split(',')[0];
+        const latitude = this.poiAddress.location.split(',')[1];
         console.log(this.mobile);
         this.props.createAddress({
           longitude,
           latitude,
           userId: this.props.user.id,
-          name:  this.consigneeName,
+          name: this.consigneeName,
           mobile: this.mobile,
           provinceName: this.poiAddress.pname,
           cityName: this.poiAddress.cityname,
@@ -123,6 +125,26 @@ class AddressEdit extends React.Component {
           isDefault: this.isDefault });
       } else {
         // 编辑地址
+        let longitude;
+        let latitude;
+        if (this.poiAddress.location) {
+          // 重新选择了地址，需要发送请求获取省市区码
+          longitude = this.poiAddress.location.split(',')[0];
+          latitude = this.poiAddress.location.split(',')[1];
+        }
+        this.props.updateAddress({
+          longitude,
+          latitude,
+          userId: this.props.user.id,
+          consigneeId: this.consigneeId,
+          name: this.consigneeName,
+          mobile: this.isMobileEdited ? this.mobile : null,
+          provinceName: this.poiAddress.pname ? this.poiAddress.pname : this.addressInfo.provinceName,
+          cityName: this.poiAddress.cityname ? this.poiAddress.cityname : this.addressInfo.cityName,
+          districtName: this.poiAddress.adname ? this.poiAddress.adname : this.addressInfo.districtName,
+          address: this.addressDetail,
+          isDefault: this.isDefault,
+        });
       }
     }
   }
@@ -154,6 +176,7 @@ class AddressEdit extends React.Component {
                 defaultValue={this.mobile}
                 onChangeText={(text) => {
                   this.mobile = text;
+                  this.isMobileEdited = true;
                 }}
               />
             </View>
@@ -271,7 +294,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   selectContact: () => dispatch(selectContactAsConsignee()),
   selectMapAddress: navigation => dispatch(selectMapAddress({ navigation })),
-  createAddress: ({ longitude, latitude, userId, name, mobile, province, provinceName, city, cityName, district, districtName, address, location, isDefault }) => dispatch(createAddressAction({ longitude, latitude, userId, name, mobile, province, provinceName, city, cityName, district, districtName, address, location, isDefault })),
+  createAddress: ({ longitude, latitude, userId, name, mobile, province, provinceName, city, cityName, district, districtName, address, isDefault }) => dispatch(createAddressAction({ longitude, latitude, userId, name, mobile, province, provinceName, city, cityName, district, districtName, address, isDefault })),
+  updateAddress: ({ longitude, latitude, userId, consigneeId, name, mobile, province, provinceName, city, cityName, district, districtName, address, isDefault }) => dispatch(updateAddressAction({ longitude, latitude, userId, consigneeId, name, mobile, province, provinceName, city, cityName, district, districtName, address, isDefault })),
   exit: () => dispatch(addressEditExitAction()),
 });
 

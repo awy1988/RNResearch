@@ -7,7 +7,7 @@ import * as types from '../constants/ActionTypes';
 import ApiService from '../network/ApiService';
 
 import {
-  createAddressSuccessAction,
+  createAddressSuccessAction, deleteAddressSuccessAction,
   fetchAddressListAction,
   fetchAddressListCompleteAction,
   selectContactAsConsigneeComplete, updateAddressSuccessAction,
@@ -111,6 +111,7 @@ export function* createAddress(action) {
 }
 
 export function* updateAddress(action) {
+  // 更新地址
   try {
     let nearestCityResponseBody;
     if (action.payload.longitude && action.payload.latitude) {
@@ -142,9 +143,32 @@ export function* updateAddress(action) {
     yield put(fetchAddressListAction({ userId: action.payload.userId }));
     ToastUtil.showToast('编辑地址成功');
   } catch (e) {
+    // TODO 异常处理
     console.log(e);
   }
 }
+
+export function* deleteAddressFromList(action) {
+  try {
+    yield call(ApiService.deleteAddress, action.payload.userId, action.payload.consigneeId);
+    yield put(fetchAddressListAction({ userId: action.payload.userId }));
+    ToastUtil.showToast('删除地址成功');
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export function* deleteAddressFromEdit(action) {
+  try {
+    yield call(ApiService.deleteAddress, action.payload.userId, action.payload.consigneeId);
+    yield put(deleteAddressSuccessAction());
+    yield put(fetchAddressListAction({ userId: action.payload.userId }));
+    ToastUtil.showToast('删除地址成功');
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 
 export function* watchSelectContactAsConsignee() {
   yield takeEvery(types.address.SELECT_CONTACT_AS_CONSIGNEE, selectContact);
@@ -160,5 +184,13 @@ export function* watchCreateAddress() {
 
 export function* watchUpdateAddress() {
   yield takeEvery(types.address.UPDATE_ADDRESS, updateAddress);
+}
+
+export function* watchDeleteAddressFromList() {
+  yield takeEvery(types.address.DELETE_ADDRESS_FROM_LIST, deleteAddressFromList);
+}
+
+export function* watchDeleteAddressFromEdit() {
+  yield takeEvery(types.address.DELETE_ADDRESS_FROM_EDIT, deleteAddressFromEdit);
 }
 

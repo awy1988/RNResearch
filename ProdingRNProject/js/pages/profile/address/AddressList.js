@@ -1,8 +1,12 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList, TouchableWithoutFeedback, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { fetchAddressListAction, setDefaultAddressAction } from '../../../actions/address/addressActions';
+import {
+  deleteAddressFromListAction,
+  fetchAddressListAction, openEditAddressAction,
+  setDefaultAddressAction,
+} from '../../../actions/address/addressActions';
 import {
   COMMON_FONT_SIZE_LEVEL_3, COMMON_FONT_SIZE_LEVEL_4, COMMON_MARGIN,
   COMMON_PADDING,
@@ -32,6 +36,7 @@ class AddressList extends React.Component {
 
 
   render() {
+    console.log('++++++++addressList Render is called');
     return (
       <View style={{ flex: 1 }}>
         <FlatList
@@ -69,6 +74,7 @@ class AddressList extends React.Component {
                         onPress={
                           () => {
                             this.props.navigation.navigate('AddressEdit', { type: 'edit', addressInfo: item });
+                            this.props.openEdit(item);
                           }
                         }
                       >
@@ -80,7 +86,15 @@ class AddressList extends React.Component {
                       <TouchableWithoutFeedback
                         onPress={
                           () => {
-                            console.log('删除');
+                            // 删除地址
+                            Alert.alert(
+                              null,
+                              '确定删除地址吗',
+                              [
+                                { text: '确定', onPress: () => this.props.deleteAddress(this.props.user.id, item.id) },
+                                { text: '取消' },
+                              ],
+                            );
                           }
                         }
                       >
@@ -106,7 +120,7 @@ class AddressList extends React.Component {
           <ThemeButton
             btnStyle={pageStyle.bottomButton}
             onPress={() => {
-              this.props.navigation.navigate('AddressEdit', { type: 'create', isDefault: this.props.addressList && this.props.addressList.length > 0 ? false : true });
+              this.props.navigation.navigate('AddressEdit', { type: 'create', isDefault: !(this.props.addressList && this.props.addressList.length > 0) });
             }}
             text="新建地址"
             icon="ios-add-outline"
@@ -194,6 +208,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   fetchAddressList: userId => dispatch(fetchAddressListAction({ userId })),
   setDefault: (userId, consigneeId) => dispatch(setDefaultAddressAction({ userId, consigneeId, isDefault: true })),
+  deleteAddress: (userId, consigneeId) => dispatch(deleteAddressFromListAction({ userId, consigneeId })),
+  openEdit: selectedAddress => dispatch(openEditAddressAction({ selectedAddress })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddressList);

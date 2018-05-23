@@ -1,17 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Text, TextInput, View, StyleSheet, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { Text, TextInput, View, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ListDividerLine from '../../../components/common/ListDividerLine';
 import {
-  COMMON_DIVIDER_COLOR, COMMON_MARGIN,
+  COMMON_BLACK,
+  COMMON_DIVIDER_COLOR, COMMON_FONT_SIZE_LEVEL_2, COMMON_MARGIN,
   COMMON_PADDING, COMMON_PRIMARY_FONT_COLOR,
   COMMON_THEME_COLOR,
   COMMON_WHITE,
 } from '../../../constants/StyleConstants';
 import ThemeButton from '../../../components/common/ThemeButton';
 import {
-  addressEditExitAction, createAddressAction,
+  addressEditExitAction, createAddressAction, deleteAddressFromEditAction, deleteAddressFromListAction,
   selectContactAsConsignee,
   selectMapAddress, updateAddressAction,
 } from '../../../actions/address/addressActions';
@@ -21,6 +22,25 @@ class AddressEdit extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.getParam('type', 'create') === 'create' ? '新建收货地址' : '编辑收货地址',
+      headerRight: (
+        navigation.getParam('type', 'create') === 'create' ? null : (
+          <Text
+            style={{color: COMMON_BLACK, marginRight:COMMON_MARGIN, fontSize: COMMON_FONT_SIZE_LEVEL_2}}
+            onPress={() => {
+              // 删除地址
+              Alert.alert(
+                null,
+                '确定删除地址吗',
+                [
+                  { text: '确定', onPress: () => navigation.state.params.deleteBtnPress() },
+                  { text: '取消' },
+                ],
+              );
+            }}
+          >
+            删除
+          </Text>
+        )),
     };
   };
 
@@ -45,16 +65,19 @@ class AddressEdit extends React.Component {
     this.poiAddress = {};
     this.onSelectAddressClick = this.onSelectAddressClick.bind(this);
     this.onSaveBtnClick = this.onSaveBtnClick.bind(this);
+    this.onDeleteAddressClick = this.onDeleteAddressClick.bind(this);
   }
 
   componentDidMount() {
     // this.consigneeName =
+    this.props.navigation.setParams({ deleteBtnPress: this.onDeleteAddressClick });
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('=============addressEdit next props');
     console.log(nextProps);
 
-    if (nextProps.createAddressSuccess) {
+    if (nextProps.shouldExitAddressEdit) {
       this.props.navigation.goBack();
       this.props.exit();
       return;
@@ -81,6 +104,10 @@ class AddressEdit extends React.Component {
 
   onSelectAddressClick() {
     this.props.selectMapAddress(this.props.navigation);
+  }
+
+  onDeleteAddressClick() {
+    this.props.deleteAddress(this.props.user.id, this.consigneeId);
   }
 
   formCheck() {
@@ -287,7 +314,7 @@ const mapStateToProps = (state) => {
   return {
     ...state.address.selectedAddress,
     user: state.user,
-    createAddressSuccess: state.address.createAddressSuccess,
+    shouldExitAddressEdit: state.address.shouldExitAddressEdit,
   };
 };
 
@@ -296,6 +323,7 @@ const mapDispatchToProps = dispatch => ({
   selectMapAddress: navigation => dispatch(selectMapAddress({ navigation })),
   createAddress: ({ longitude, latitude, userId, name, mobile, province, provinceName, city, cityName, district, districtName, address, isDefault }) => dispatch(createAddressAction({ longitude, latitude, userId, name, mobile, province, provinceName, city, cityName, district, districtName, address, isDefault })),
   updateAddress: ({ longitude, latitude, userId, consigneeId, name, mobile, province, provinceName, city, cityName, district, districtName, address, isDefault }) => dispatch(updateAddressAction({ longitude, latitude, userId, consigneeId, name, mobile, province, provinceName, city, cityName, district, districtName, address, isDefault })),
+  deleteAddress: (userId, consigneeId) => dispatch(deleteAddressFromEditAction({ userId, consigneeId })),
   exit: () => dispatch(addressEditExitAction()),
 });
 

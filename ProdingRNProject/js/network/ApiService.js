@@ -285,4 +285,8 @@ export default class ApiService {
     if (isDefault) bodyParams.isDefault = isDefault;
     return HttpUtil.patch(url, null, bodyParams);
   }
+  static deleteAddress(userId, consigneeId) {
+    const url = `${BASE_URL}/users/${userId}/consignees/${consigneeId}`;
+    HttpUtil.delete(url);
+  }
 }

@@ -6,7 +6,7 @@ const initialState = {
     name: '',
     mobile: '',
   },
-  createAddressSuccess: false,
+  shouldExitAddressEdit: false,
 };
 
 
@@ -17,6 +17,11 @@ export default address = (state = initialState, action) => {
       return {
         ...state,
         addressList: action.payload.addressList,
+      };
+    case types.address.OPEN_ADDRESS_EDIT:
+      return {
+        ...state,
+        selectedAddress: action.payload.selectedAddress,
       };
     case types.address.SELECT_CONTACT_AS_CONSIGNEE_COMPLETE:
       return {
@@ -38,18 +43,23 @@ export default address = (state = initialState, action) => {
     case types.address.ADDRESS_EDIT_EXIT:
       return {
         ...state,
-        createAddressSuccess: false,
+        shouldExitAddressEdit: false,
         selectedAddress: initialState.selectedAddress,
       };
     case types.address.CREATE_ADDRESS_SUCCESS:
       return {
         ...state,
-        createAddressSuccess: true,
+        shouldExitAddressEdit: true,
       };
     case types.address.UPDATE_ADDRESS_SUCCESS:
       return {
         ...state,
-        createAddressSuccess: true,
+        shouldExitAddressEdit: true,
+      };
+    case types.address.DELETE_ADDRESS_SUCCESS:
+      return {
+        ...state,
+        shouldExitAddressEdit: true,
       };
     default:
       break;

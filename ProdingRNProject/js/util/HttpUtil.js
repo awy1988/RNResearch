@@ -138,6 +138,30 @@ export default class HttpUtil {
     });
   }
 
+  static delete(url, queryParams) {
+    url = this.handleQueryParams(url, queryParams);
+
+    const requestHeaders = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    // token存在
+    if (global.token) {
+      requestHeaders.Authorization = `Bearer ${global.token}`;
+    }
+    return fetch(url, {
+      method: 'DELETE',
+      headers: requestHeaders,
+    }).then((response) => {
+      // 共通错误处理
+      if (response.status >= 400) {
+        return Promise.reject(response);
+      }
+      return Promise.resolve(response.json());
+    });
+  }
+
   static handleQueryParams(url, queryParams) {
     // 处理查询参数
     if (queryParams) {

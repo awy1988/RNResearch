@@ -13,7 +13,7 @@ import {
 } from './mainSaga';
 import { watchSystemStartup, watchFetchUserInfo } from './systemSaga';
 import {
-  watchCreateAddress,
+  watchCreateAddress, watchDeleteAddressFromEdit, watchDeleteAddressFromList,
   watchFetchAddressList,
   watchSelectContactAsConsignee,
   watchSelectMapAddress,
@@ -41,5 +41,7 @@ export default function* rootSaga() {
     watchSelectMapAddress(),
     watchCreateAddress(),
     watchUpdateAddress(),
+    watchDeleteAddressFromList(),
+    watchDeleteAddressFromEdit(),
   ];
 }

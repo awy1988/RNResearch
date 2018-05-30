@@ -25,7 +25,7 @@ class AddressEdit extends React.Component {
       headerRight: (
         navigation.getParam('type', 'create') === 'create' ? null : (
           <Text
-            style={{color: COMMON_BLACK, marginRight:COMMON_MARGIN, fontSize: COMMON_FONT_SIZE_LEVEL_2}}
+            style={{color: COMMON_BLACK, marginRight: COMMON_MARGIN, fontSize: COMMON_FONT_SIZE_LEVEL_2}}
             onPress={() => {
               // 删除地址
               Alert.alert(
@@ -69,13 +69,10 @@ class AddressEdit extends React.Component {
   }
 
   componentDidMount() {
-    // this.consigneeName =
     this.props.navigation.setParams({ deleteBtnPress: this.onDeleteAddressClick });
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('=============addressEdit next props');
-    console.log(nextProps);
 
     if (nextProps.shouldExitAddressEdit) {
       this.props.navigation.goBack();
